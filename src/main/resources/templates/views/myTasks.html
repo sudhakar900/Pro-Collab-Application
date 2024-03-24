@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Tasks</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/projectTasks.css}">
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+</head>
+<body>
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
+</header>
+<div class="container">
+    <div class="task-list">
+        <h1>Tasks of User</h1>
+        <!-- Check if projects is not null -->
+        <th:block th:if="${projects != null}">
+            <!-- Iterate over each project -->
+            <div th:each="project : ${projects}" class="project">
+                <h2 th:text="${project.name}"></h2>
+                <table class="task-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Iterate over each task in the project -->
+                        <tr th:each="task : ${project.tasks}" class="task-row">
+                            <!-- Check if the logged-in user is involved in the task -->
+                            <th:block th:if="${task.createdUser.name == user.name || task.owner?.name == user.name}">
+                                <td th:text="${task.name}" class="task-name"></td>
+                                <td th:text="${task.description}" class="task-description"></td>
+                                <td th:text="${task.date}" class="task-date"></td>
+                                <!-- Use the correct URL syntax for task details -->
+                                <td>
+                                    <a th:href="@{'/projects/projectTasks/' + ${project.id} + '/taskDetails/' + ${task.id}}"
+                                       class="task-link">
+                                        Details
+                                    </a>
+                                </td>
+                            </th:block>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </th:block>
+    </div>
+</div>
+</body>
+</html>

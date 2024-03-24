@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Details</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/projectDetails.css}">
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+</head>
+<body>
+<header class="header">
+    <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
+</header>
+<div class="container">
+    <div class="project-details">
+        <h1 class="project-title">Project Details</h1>
+        <h2 class="project-name" th:text="${project.name}"></h2>
+        <p class="project-description" th:text="${project.description}"></p>
+
+        <p class="project-manager">Project Manager: <span th:text="${project.creator.name}"></span></p>
+        <p class="due-date">Due Date: <span th:text="${project.dueDate}"></span></p>
+        <form  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="complete-form" th:action="@{/projects/markComplete/{projectId}(projectId=${project.id})}" method="post">
+            <label class="complete-label">
+                <input type="checkbox" name="completed" class="complete-checkbox" th:checked="${project.completed}" onchange="this.form.submit()">
+                Mark as Completed
+            </label>
+        </form>
+      
+    </div>
+
+    <div class="actions">
+        <a th:href="@{'/projects/employees/' + ${project.id}}" class="btn view-employees-btn">View Employee List</a>
+        
+        <!-- Conditionally show the "Create Task" button for admin users -->
+        <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/task/create/' + ${project.id}}" class="btn create-task-btn">Create Task</a>
+        
+        <a  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/projects/tasks/' + ${project.id}}" class="btn view-tasks-btn">View Project Tasks</a>
+        <a  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/project/createTeam/' + ${project.id}}" class="btn create-team-btn">Create Team</a>
+        <a th:href="@{'/project/'+ ${project.id} +'/teams'}" class="btn view-teams-btn">View Teams</a>
+
+    </div>
+</div>
+
+</script>
+</body>
+</html>

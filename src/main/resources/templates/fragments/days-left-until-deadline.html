@@ -1,0 +1,13 @@
+<html lang="eng" xmlns="http://www.thymeleaf.org">
+  <td th:fragment="daysLeft(t)" class="daysContent">
+    <span
+      th:with="days=${t.daysLeftUntilDeadline(t.date)}"
+      th:class="${t.completed} ? 'badge badge-success badge-pill daysButton' :
+                                (${days>1} ? 'badge badge-info badge-pill daysButton':
+                                        (${days>-1} ? 'badge badge-warning badge-pill daysButton' :
+                                                'badge badge-danger badge-pill daysButton'))"
+      th:text="${t.completed} ? 'completed' : ${days}"
+    >
+    </span>
+  </td>
+</html>

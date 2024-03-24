@@ -1,0 +1,201 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .employee-list {
+    margin-bottom: 30px;
+  }
+  
+  h1 {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    color: #555;
+    margin-bottom: 15px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .add-employee-section {
+    margin-top: 30px;
+  }
+  
+  .add-employee-section h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .employee-form {
+    display: flex;
+    align-items: center;
+  }
+  
+  .employee-form select {
+    flex: 1;
+    padding: 8px;
+    margin-right: 10px;
+  }
+  
+  .employee-form button {
+    padding: 8px 16px;
+  }
+  .container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top:70px;
+}
+
+.employee-list {
+    margin-bottom: 20px;
+}
+
+.add-employee-section {
+    margin-bottom: 20px;
+}
+
+.employee-form {
+    display: flex;
+    align-items: center;
+}
+
+.select-box {
+    width: 200px;
+    margin-right: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+
+.add-btn {
+    margin-left: 10px;
+}
+
+.delete-btn {
+    background-color: #f44336;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
+}
+
+.employee-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.employee-table th, .employee-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+
+}
+
+.employee-name {
+    font-weight: bold;
+}
+
+.action-heading {
+    text-align: center;
+}
+/* Add this to your CSS file */
+
+/* Table body styling */
+.team-users-table tbody tr {
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
+}
+
+.team-users-table tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+.team-users-table tbody td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.team-users-table tbody td a {
+  display: inline-block;
+  padding: 8px 12px;
+  background-color: #3498db;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.team-users-table tbody td a:hover {
+  background-color: #2980b9;
+}
+/* Add this CSS to your projectEmployees.css file */
+
+/* Premium styling for the button */
+.assign-btn {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect */
+.assign-btn:hover {
+  background-color: #45a049;
+}
+

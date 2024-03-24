@@ -1,0 +1,202 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-top: 70px;
+}
+
+.heading {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.team-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.team-table th,
+.team-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.team-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.team-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.button {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    background-image: linear-gradient(to bottom, #007bff, #0056b3);
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+.button:hover {
+    background-color: #0056b3;
+    background-image: linear-gradient(to bottom, #0056b3, #004099);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.5);
+    color:white;
+    text-decoration: none;
+}
+.table-container {
+    margin-top: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table tr:hover {
+    background-color: #f2f2f2;
+}
+/* viewTeams.css */
+
+/* Table styling */
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.team-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.team-table th,
+.team-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.team-table th {
+    background-color: #f4f4f4;
+}
+
+.team-row:hover {
+    background-color: #f9f9f9;
+}
+
+/* Button styling */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.button-details {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.button-members {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+.button:hover {
+    background-color: #555;
+}
+/* Add this to your CSS file */
+
+/* Table body styling */
+.team-users-table tbody tr {
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+.team-users-table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.team-users-table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.team-users-table tbody td a {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.team-users-table tbody td a:hover {
+    background-color: #2980b9;
+}

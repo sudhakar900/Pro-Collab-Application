@@ -1,0 +1,219 @@
+/* projectDetails.css */
+
+/* Body Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container Styles */
+.container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  margin-top:70px;
+}
+
+/* Header Styles */
+.header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+  border-bottom: 2px solid #fff;
+}
+
+/* Project Details Styles */
+.project-details {
+  margin-bottom: 30px;
+}
+
+.project-title {
+  color: #333;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.project-name {
+  color: #555;
+  font-size: 28px;
+  margin-bottom: 15px;
+}
+
+.project-description {
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.project-manager,
+.due-date {
+  color: #999;
+  margin-bottom: 15px;
+}
+
+.complete-form {
+  margin-bottom: 20px;
+}
+
+.complete-label {
+  color: #333;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.complete-checkbox {
+  margin-right: 5px;
+}
+
+/* Actions Styles */
+.actions {
+  text-align: center;
+}
+
+.btn {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  padding: 12px 24px;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  margin-right: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  
+}
+
+.btn:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-2px);
+}
+/* Premium Styling for Buttons */
+
+.btn {
+  /* Already provided */
+
+  /* Additional styles */
+  font-size: 18px;
+  margin-bottom: 10px;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 10px;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.btn:hover {
+  background-color: #45a049; /* Darker Green */
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  background-color: #419641; /* Active Green */
+  transform: translateY(1px);
+}
+/* Premium Styling for Project Completed Checkbox */
+
+.complete-checkbox {
+  /* Already provided */
+
+  /* Additional styles */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #4CAF50; /* Green */
+  border-radius: 50%;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.complete-checkbox:checked {
+  border-color: #45a049; /* Darker Green */
+  background-color: #45a049; /* Darker Green */
+}
+
+.complete-checkbox:focus {
+  border-color: #45a049; /* Darker Green */
+  box-shadow: 0 0 0 3px rgba(69, 160, 73, 0.3); /* Darker Green with 30% opacity */
+}
+/* Premium Styling for Project Completed Checkbox */
+
+.complete-checkbox {
+  /* Already provided */
+
+  /* Additional styles */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #4CAF50; /* Green */
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  position: relative;
+}
+
+.complete-checkbox:checked::before {
+  content: "\2713"; /* Unicode for Checkmark symbol */
+  font-size: 16px;
+  color: #fff; /* White */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.complete-checkbox:focus {
+  border-color: #45a049; /* Darker Green */
+  box-shadow: 0 0 0 3px rgba(69, 160, 73, 0.3); /* Darker Green with 30% opacity */
+}
+
+/* Hide the default checkbox */
+.complete-checkbox::-ms-check {
+  display: none;
+}
+.complete-checkbox::-moz-check {
+  display: none;
+}
+.complete-checkbox::-webkit-check {
+  display: none;
+}
+.complete-checkbox::check {
+  display: none;
+}
+.complete-checkbox {
+  /* Already provided */
+
+  /* Additional styles */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #4CAF50; /* Green */
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  vertical-align: middle; /* Align checkbox vertically */
+  margin-right: 5px; /* Add some space between checkbox and text */
+}
+
+.complete-label {
+  /* Additional styles */
+  vertical-align: middle; /* Align text vertically */
+}

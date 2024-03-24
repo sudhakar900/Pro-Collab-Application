@@ -1,0 +1,83 @@
+/* projectTasks.css */
+
+/* Body Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container Styles */
+.container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin-top:50px;
+}
+
+/* Header Styles */
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+  border-bottom: 2px solid #fff;
+}
+
+/* Task List Styles */
+.task-list {
+  margin-top: 20px;
+}
+
+.task-list h1 {
+  color: #333;
+}
+
+/* Project Styles */
+.project {
+  margin-top: 20px;
+}
+
+.project h2 {
+  color: #555;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+/* Task Row Styles */
+.task-row:hover {
+  background-color: #f9f9f9;
+}
+
+/* Task Link Styles */
+.task-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.task-link:hover {
+  text-decoration: underline;
+}

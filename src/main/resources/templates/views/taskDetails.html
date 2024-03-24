@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Details</title>
+    <link rel="stylesheet" th:href="@{/css/taskThread.css}">
+                <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+
+</head>
+<body>
+    <header>
+        <!--/*/ <th:block th:include="fragments/header :: header('about')"></th:block> /*/-->
+    </header>
+    <div class="container">
+        <h1 class="heading">Task Details</h1>
+        <a th:href="@{'/task/edit/' + ${task.id}}">
+            <span class="edit-button">Edit</span>
+        </a>
+                <div class="task-info">
+            <h2>Task Information</h2>
+            <p><strong>Task Name:</strong> <span th:text="${task.name}"></span></p>
+            <p><strong>Description:</strong> <span th:text="${task.description}"></span></p>
+            <p><strong>Due Date:</strong> <span th:text="${task.date}"></span></p>
+            <p><strong>Current Status:</strong> <span th:text="${task.action}"></span></p>
+            <a  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/assignment/project/' + ${task.project.id} + '/task/' + ${task.id}}">Assign Task</a>
+        </div>
+        <div class="task-history">
+            <h2>Task History</h2>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>User</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="history : ${taskHistory}">
+                        <td th:if="${history.user != null}" th:text="${history.user.name}"></td>
+                        <td th:if="${history.user == null}" >Not  Assigned Yet</td>
+                        <td th:text="${history.action}"></td>
+                        <td th:text="${history.timestamp}"></td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="task-comments">
+            <h2>Task Threads</h2>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Task ID</th>
+                        <th>User Name</th>
+                        <th>Content</th>
+                        <th>Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr th:each="comment : ${taskThreads}">
+                            <td th:text="${comment.id}"></td>
+                            <td th:if="${comment.user != null}" th:text="${comment.user.name}">User Not Available</td>
+                            <td th:unless="${comment.user != null}">User Not Available</td>
+                            <td th:text="${comment.content}"></td>
+                            <td th:text="${comment.localDateTime}"></td>
+                        </tr>
+                    
+                </tbody>
+            </table>
+            
+        </div>
+        <form th:action="@{'/tasks/' + ${task.id} + '/comment'}" method="post">
+            <textarea name="content" placeholder="Add a comment"></textarea>
+            <button type="submit">Add Comment</button>
+        </form>
+        
+        
+    </div>
+</body>
+</html>

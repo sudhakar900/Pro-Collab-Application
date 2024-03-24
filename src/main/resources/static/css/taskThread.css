@@ -1,0 +1,83 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f6f6f6;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin-top: 80px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+    color: #333;
+}
+
+.task-info, .task-history, .task-comments {
+    margin-bottom: 30px;
+}
+
+.task-info h2, .task-history h2, .task-comments h2 {
+    color: #333;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+}
+
+.history-table, .comments-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-table th, .history-table td,
+.comments-table th, .comments-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.history-table th, .comments-table th {
+    background-color: #f2f2f2;
+}
+
+textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+.container{
+    position: relative;
+}
+.edit-button {
+    position: absolute; /* Position the edit button absolutely */
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    display: inline-block;
+    width: 50px; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+    background-image: url('https://img.icons8.com/ios-glyphs/30/create-new.png'); /* Replace 'path/to/edit-icon.png' with the actual path to your edit icon */
+    background-size: cover;
+    text-indent: -9999px; /* Hide the anchor text */
+    overflow: hidden;
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Employees</title>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/projectEmployees.css}">
+</head>
+<body>
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
+</header>
+<div class="container">
+    <div class="employee-list">
+        <h1>Employee List For Teams</h1>
+        
+        <!-- Conditionally show the "Add Employee" section for admin users -->
+        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+            <div class="add-employee-section">
+                <h2>Add Employee to Project</h2>
+                <form id="addEmployeeForm" class="employee-form">
+                    <select name="userId" id="userId">
+                        <!-- Populate with available users -->
+                        <option th:each="user : ${availableUsers}" th:value="${user.id}" th:text="${user.name}"></option>
+                    </select>
+                    <button class="btn" type="button" th:onclick="'addEmployeeToProject(' + ${projectId} + ',' + ${teamId} + ')'">Add Employee</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <table>
+        <thead>
+            <tr >
+                <th>Name</th>
+                <th th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"  style="text-align: center;">Assign Tasks</th>
+                <th th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"  style="text-align: center;">Delete From Team</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${teamUsers}">
+                <td th:text="${user.name}"></td>
+                <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"  style="text-align: center;"> 
+                    <a class="assign-btn" th:href="@{/assignment/{userId}(userId=${user.id})}">Assign</a>
+                </td>
+                <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" style="text-align: center;">
+                    <a class="delete-btn btn" th:href="@{'/project/assignment/delete/project/' + ${projectId} + '/team/' + ${teamId} + '/user/' + ${user.id}}">Delete</a>
+                </td>
+                
+            </tr>
+        </tbody>
+    </table>
+    
+
+    
+   
+
+<!-- JavaScript function to handle adding employee to project -->
+<script th:inline="javascript">
+
+    function addEmployeeToProject(projectId,teamId) {
+        console.log(projectId,teamId)
+        var form = document.getElementById('addEmployeeForm');
+        var userId = form.userId.value;
+
+        fetch('/project/' + projectId + '/teams/' + teamId +'/addUsers/'+userId,{
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload(); // Reload the page after successful addition
+            } else {
+                alert('Failed to add employee to project.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to add employee to project.');
+        });
+    }
+
+    // JavaScript function to handle removing employee from project
+    function removeEmployeeFromProject(employeeId) {
+        if (confirm('Are you sure you want to remove this employee from the project?')) {
+            fetch('/projects/' + projectId + '/employees/' + employeeId, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload(); // Reload the page after successful removal
+                } else {
+                    alert('Failed to remove employee from project.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to remove employee from project.');
+            });
+        }
+    }
+
+</script>
+</body>
+</html>
