@@ -154,7 +154,7 @@ public class TaskController {
         // Save the task
         taskService.createTask(task);
 
-        return "redirect:/tasks";
+        return "redirect:/projects/tasks/"+projectId;
     }
 
     @PostMapping("/task/create")

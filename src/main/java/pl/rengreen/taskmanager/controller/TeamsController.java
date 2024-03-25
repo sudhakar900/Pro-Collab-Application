@@ -1,6 +1,7 @@
 package pl.rengreen.taskmanager.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,10 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.rengreen.taskmanager.model.Project;
+import pl.rengreen.taskmanager.model.Task;
 import pl.rengreen.taskmanager.model.Teams;
 import pl.rengreen.taskmanager.model.User;
 import pl.rengreen.taskmanager.repository.TeamRepository;
 import pl.rengreen.taskmanager.service.ProjectService;
+import pl.rengreen.taskmanager.service.TaskService;
 import pl.rengreen.taskmanager.service.TeamService;
 import pl.rengreen.taskmanager.service.UserService;
 
@@ -38,15 +41,17 @@ public class TeamsController {
     private final ProjectService projectService;
     private final UserService userService;
     private final TeamService teamService;
+    private final TaskService taskService;
 
     @Autowired
     private TeamRepository repo;
 
     @Autowired
-    public TeamsController(ProjectService projectService, UserService userService, TeamService teamService) {
+    public TeamsController(ProjectService projectService, UserService userService, TeamService teamService,TaskService taskService) {
         this.projectService = projectService;
         this.userService = userService;
         this.teamService = teamService;
+        this.taskService=taskService;
     }
 
     @GetMapping("/createTeam/{projectId}")
@@ -104,6 +109,14 @@ public class TeamsController {
         Teams team = teamService.getTeamById(teamId).orElseThrow(() -> new IllegalArgumentException("Team not found"));
         User user = userService.getUserById(userId);
         List<User> users = team.getUsers();
+        List<Task> projectTask=project.getTasks();
+        List<Task> taskList=user.getTasksOwned();
+        for(Task t:taskList){
+            if(projectTask.contains(t)){
+                t.setOwner(null);
+                taskService.updateTask(t.getId(), t);
+            }
+        }
         users.remove(user);
         team.setUsers(users);
         teamService.createTeam(team);

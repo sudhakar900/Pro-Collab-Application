@@ -1,9 +1,6 @@
 package pl.rengreen.taskmanager.service;
 
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -148,34 +145,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> createUsersFromExcel(MultipartFile file, Company company) throws IOException {
         List<User> users = new ArrayList<>();
-        Workbook workbook = WorkbookFactory.create(file.getInputStream());
-        Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
-
-        Iterator<Row> rowIterator = sheet.iterator();
-        // Skip header row if necessary
-        if (rowIterator.hasNext()) {
-            rowIterator.next();
-        }
-
-        while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
-            // Assuming the columns are in the order: email, name, password
-            String email = row.getCell(0).getStringCellValue();
-            String name = row.getCell(1).getStringCellValue();
-            String password = generateRandomPassword();
-            // Create a new User object
-            User user = new User();
-            user.setEmail(email);
-            user.setName(name);
-            user.setPassword(bCryptPasswordEncoder.encode(password));
-            // Set the company for the user based on the logged-in admin
-            // You may need to adjust this part based on your application's logic
-            user.setCompany(company);
-            this.saveUser(user);
-            users.add(user);
-        }
-
-        workbook.close();
         // Save the users to the database
 
         return users;

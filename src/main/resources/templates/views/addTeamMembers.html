@@ -41,7 +41,7 @@
             <tr th:each="user : ${teamUsers}">
                 <td th:text="${user.name}"></td>
                 <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"  style="text-align: center;"> 
-                    <a class="assign-btn" th:href="@{/assignment/{userId}(userId=${user.id})}">Assign</a>
+                    <a class="assign-btn" th:href="@{'/assignment/project/' + ${projectId} + '/team/' + ${teamId} + '/user/' + ${user.id}}">Assign</a>
                 </td>
                 <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" style="text-align: center;">
                     <a class="delete-btn btn" th:href="@{'/project/assignment/delete/project/' + ${projectId} + '/team/' + ${teamId} + '/user/' + ${user.id}}">Delete</a>

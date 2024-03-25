@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import pl.rengreen.taskmanager.model.Project;
@@ -16,6 +17,7 @@ import pl.rengreen.taskmanager.model.Role;
 import pl.rengreen.taskmanager.model.Task;
 import pl.rengreen.taskmanager.model.Teams;
 import pl.rengreen.taskmanager.model.User;
+import pl.rengreen.taskmanager.repository.TeamRepository;
 import pl.rengreen.taskmanager.service.CompanyService;
 import pl.rengreen.taskmanager.service.EmailService;
 import pl.rengreen.taskmanager.service.ProjectService;
@@ -31,6 +33,8 @@ public class AssigmentController {
     private CompanyService companyService;
     private ProjectService projectService;
 
+    @Autowired
+    private TeamRepository teamRepository;
     @Autowired
     public AssigmentController(UserService userService, TaskService taskService, EmailService emailService,
             CompanyService companyService, ProjectService projectService) {
@@ -77,19 +81,7 @@ public class AssigmentController {
         return "forms/assignment";
     }
 
-    @GetMapping("/project/{projectId}/task/{taskId}")
-    public String assignProjectTask(@PathVariable long projectId, @PathVariable long taskId, Model model) {
-        Project project = projectService.getProjectById(projectId);
-        Task task = taskService.getTaskById(taskId);
-        List<User> projectUsers = project.getEmployees();
-        if (task.getOwner() != null) {
-            projectUsers.remove(task.getOwner());
-        }
-        model.addAttribute("users", projectUsers);
-        model.addAttribute("taskId", taskId);
-        model.addAttribute("projectId", projectId);
-        return "forms/taskAssignment";
-    }
+  
 
     @GetMapping("/project/{projectId}/task/{taskId}/assign/{userId}")
     public String assignToUser(@PathVariable long projectId, @PathVariable long taskId, @PathVariable long userId) {
@@ -134,5 +126,42 @@ public class AssigmentController {
         taskService.unassignTask(selectedTask);
         return "redirect:/assignment/" + userId;
     }
+    @GetMapping("/project/{projectId}/team/{teamId}/user/{userId}")
+    public String assignTaskToTeamMember(@PathVariable long projectId,@PathVariable long teamId,@PathVariable long userId,Principal principal,Model model){
+        String email = principal.getName();
+        User user = userService.getUserByEmail(email);
+        List<Task> freeTasks = freeTasks(principal, userId);
+        model.addAttribute("selectedUser", userService.getUserById(userId));
+        model.addAttribute("freeTasks", freeTasks);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("teamId", teamId);
+        model.addAttribute("userId", userId);
 
+        return "forms/assignTeamTask";
+    }
+  
+    @GetMapping("/project/{projectId}/team/{teamId}/user/{userId}/task/{taskId}")
+    public String assignTaskToUser(@PathVariable long projectId,@PathVariable long teamId,@PathVariable long userId,@PathVariable long taskId){
+        Project project=projectService.getProjectById(projectId);
+        Task task=taskService.getTaskById(taskId);
+        User user=userService.getUserById(userId);
+        Teams team=teamRepository.getById(teamId);
+        task.setTeam(team);
+        taskService.assignTaskToUser(task, user);
+        emailService.sendTaskMail(user.getEmail(), task);
+        return  "redirect:/assignment/project/{projectId}/team/{teamId}/user/{userId}";
+    }
+    @GetMapping("/project/{projectId}/task/{taskId}")
+    public String assignProjectTask(@PathVariable long projectId, @PathVariable long taskId, Model model) {
+        Project project = projectService.getProjectById(projectId);
+        Task task = taskService.getTaskById(taskId);
+        List<User> projectUsers = project.getEmployees();
+        if (task.getOwner() != null) {
+            projectUsers.remove(task.getOwner());
+        }
+        model.addAttribute("users", projectUsers);
+        model.addAttribute("taskId", taskId);
+        model.addAttribute("projectId", projectId);
+        return "forms/taskAssignment";
+    }
 }
