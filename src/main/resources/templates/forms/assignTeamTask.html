@@ -73,7 +73,7 @@
 
                             <!--left table content when user has some tasks in progress-->
                             <tbody th:if="${selectedUser.getTasksInProgress().size() gt 0}">
-                            <tr th:each="t:${selectedUser.getTasksInProgress()}">
+                            <tr th:each="t:${selectedUser.getTasksInProgress()}" th:if="${t.project != null and t.project.id == projectId}">
 
                                 <!--Task in progress name-->
                                 <td th:text="${t.name}"></td>
@@ -85,7 +85,7 @@
 
                                 <!--Unassign button-->
                                 <td>
-                                    <a th:href="${'/assignment/unassign/' + selectedUser.getId()+'/'+t.id}"
+                                    <a th:href="${'/assignment/project/unassign/project/' +projectId+'/team/'+teamId+'/user/'+userId+'/task/'+t.id}"
                                        class="btn btn-outline-success btn-sm mb-2"
                                     >Unassign</a>
                                 </td>

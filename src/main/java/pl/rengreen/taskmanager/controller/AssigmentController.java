@@ -2,6 +2,7 @@ package pl.rengreen.taskmanager.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class AssigmentController {
 
     @Autowired
     private TeamRepository teamRepository;
+
     @Autowired
     public AssigmentController(UserService userService, TaskService taskService, EmailService emailService,
             CompanyService companyService, ProjectService projectService) {
@@ -81,8 +83,6 @@ public class AssigmentController {
         return "forms/assignment";
     }
 
-  
-
     @GetMapping("/project/{projectId}/task/{taskId}/assign/{userId}")
     public String assignToUser(@PathVariable long projectId, @PathVariable long taskId, @PathVariable long userId) {
         Task task = taskService.getTaskById(taskId);
@@ -126,11 +126,21 @@ public class AssigmentController {
         taskService.unassignTask(selectedTask);
         return "redirect:/assignment/" + userId;
     }
+
     @GetMapping("/project/{projectId}/team/{teamId}/user/{userId}")
-    public String assignTaskToTeamMember(@PathVariable long projectId,@PathVariable long teamId,@PathVariable long userId,Principal principal,Model model){
+    public String assignTaskToTeamMember(@PathVariable long projectId, @PathVariable long teamId,
+            @PathVariable long userId, Principal principal, Model model) {
         String email = principal.getName();
         User user = userService.getUserByEmail(email);
         List<Task> freeTasks = freeTasks(principal, userId);
+        Iterator<Task> iterator = freeTasks.iterator();
+        while (iterator.hasNext()) {
+            Task t = iterator.next();
+            if (t.getProject() == null || t.getProject().getId() != projectId) {
+                iterator.remove(); // Use iterator to remove the element
+            }
+        }
+
         model.addAttribute("selectedUser", userService.getUserById(userId));
         model.addAttribute("freeTasks", freeTasks);
         model.addAttribute("projectId", projectId);
@@ -139,19 +149,30 @@ public class AssigmentController {
 
         return "forms/assignTeamTask";
     }
-  
+
     @GetMapping("/project/{projectId}/team/{teamId}/user/{userId}/task/{taskId}")
-    public String assignTaskToUser(@PathVariable long projectId,@PathVariable long teamId,@PathVariable long userId,@PathVariable long taskId){
-        Project project=projectService.getProjectById(projectId);
-        Task task=taskService.getTaskById(taskId);
-        User user=userService.getUserById(userId);
-        Teams team=teamRepository.getById(teamId);
+    public String assignTaskToUser(@PathVariable long projectId, @PathVariable long teamId, @PathVariable long userId,
+            @PathVariable long taskId) {
+        Project project = projectService.getProjectById(projectId);
+        Task task = taskService.getTaskById(taskId);
+        User user = userService.getUserById(userId);
+        Teams team = teamRepository.getById(teamId);
         task.setTeam(team);
         taskService.assignTaskToUser(task, user);
         emailService.sendTaskMail(user.getEmail(), task);
-        return  "redirect:/assignment/project/{projectId}/team/{teamId}/user/{userId}";
+        return "redirect:/assignment/project/{projectId}/team/{teamId}/user/{userId}";
     }
-  
+
+    @GetMapping("/project/unassign/project/{projectId}/team/{teamId}/user/{userId}/task/{taskId}")
+    public String unAssignTaskToUser(@PathVariable long projectId, @PathVariable long teamId, @PathVariable long userId,
+            @PathVariable long taskId) {
+        Project project = projectService.getProjectById(projectId);
+        Task task = taskService.getTaskById(taskId);
+        task.setTeam(null);
+        task.setAction("UnAssigned");
+        taskService.unassignTask(task);
+        return "redirect:/assignment/project/{projectId}/team/{teamId}/user/{userId}";
+    }
 
     @GetMapping("/project/{projectId}/task/{taskId}")
     public String assignProjectTask(@PathVariable long projectId, @PathVariable long taskId, Model model) {
