@@ -580,3 +580,9 @@ h1 {
 .line-Chart{
     width:2200px;
 }
+#completed-text{
+    margin-top:120px;
+}
+.member-container{
+    overflow-y: auto;
+}

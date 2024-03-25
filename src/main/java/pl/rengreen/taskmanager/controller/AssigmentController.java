@@ -151,6 +151,8 @@ public class AssigmentController {
         emailService.sendTaskMail(user.getEmail(), task);
         return  "redirect:/assignment/project/{projectId}/team/{teamId}/user/{userId}";
     }
+  
+
     @GetMapping("/project/{projectId}/task/{taskId}")
     public String assignProjectTask(@PathVariable long projectId, @PathVariable long taskId, Model model) {
         Project project = projectService.getProjectById(projectId);
