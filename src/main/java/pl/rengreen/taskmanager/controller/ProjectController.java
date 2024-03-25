@@ -67,7 +67,11 @@ public class ProjectController {
     @DeleteMapping("/{projectId}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long projectId) {
         Project project = projectService.getProjectById(projectId);
-        for (Task t : project.getTasks()) {
+
+        List<Task> task = project.getTasks();
+        for (Task t : task) {
+            t.setTeam(null);
+            taskService.updateTask(t.getId(), t);
             taskHistoryService.deleteAllTaskHistoryByTask(t);
         }
         taskService.deleteAllTaskFromProject(project);
