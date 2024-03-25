@@ -124,6 +124,7 @@ public class TaskServiceImpl implements TaskService {
     public void unassignTask(Task task) {
         task.setOwner(null);
         task.setAction("Unassigned");
+        task.setTeam(null);
         taskRepository.save(task);
         LocalDateTime date = LocalDateTime.now();
         TaskHistory taskHistory = new TaskHistory();
@@ -131,6 +132,7 @@ public class TaskServiceImpl implements TaskService {
         taskHistory.setAction("Unassigned From");
         taskHistory.setTimestamp(date);
         taskHistory.setUser(task.getOwner());
+
         taskHistoryRepository.save(taskHistory);
     }
 
