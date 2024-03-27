@@ -87,10 +87,29 @@ public class ProjectController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{projectId}/employees")
+    public ResponseEntity<Void> addEmployeesToProject(@PathVariable Long projectId, @RequestBody List<Long> userIds) {
+        for (Long userId : userIds) {
+            User user = userService.getUserById(userId);
+            projectService.addEmployeeToProject(projectId, user);
+        }
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{projectId}/employees/{userId}")
     public ResponseEntity<Void> removeEmployeeFromProject(@PathVariable Long projectId, @PathVariable Long userId) {
         User user = userService.getUserById(userId);
         projectService.removeEmployeeFromProject(projectId, user);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{projectId}/employees")
+    public ResponseEntity<Void> removeSelectedEmployeesFromProject(@PathVariable Long projectId,
+            @RequestBody List<Long> userIds) {
+        for (Long userId : userIds) {
+            User user = userService.getUserById(userId);
+            projectService.removeEmployeeFromProject(projectId, user);
+        }
         return ResponseEntity.ok().build();
     }
 

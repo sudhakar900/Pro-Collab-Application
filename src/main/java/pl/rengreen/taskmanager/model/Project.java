@@ -27,6 +27,7 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private User creator;
+    private LocalDate startDate;
     private LocalDate dueDate;
     private boolean isCompleted;
     @ManyToOne
@@ -137,6 +138,14 @@ public class Project {
 
     public void setCompleted(boolean isCompleted) {
         this.isCompleted = isCompleted;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
 }

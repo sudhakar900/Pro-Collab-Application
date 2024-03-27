@@ -124,3 +124,14 @@ form button {
 form button:hover {
     background-color: #0056b3;
 }
+#start{
+    width: 300px;
+}
+#end{
+    width: 300px;
+    margin-left: 50px;
+}
+.date{
+    display: flex;
+    
+}

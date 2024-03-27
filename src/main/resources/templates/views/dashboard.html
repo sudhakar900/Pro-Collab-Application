@@ -70,8 +70,8 @@
         </div>
     </div>
     
-    <div class="container" id="line-Chart">
-        <div class="kanban-board" id="taskColumn">
+    <div class="container" id="line-Chart"  >
+        <div class="kanban-board" id="taskColumn" sec:authorize="!hasRole('ROLE_USER')">
             <div class="column" >
                 <div class="column-header">Employees In Every Project</div>
                 <div class="chart-container" id="line-chart">

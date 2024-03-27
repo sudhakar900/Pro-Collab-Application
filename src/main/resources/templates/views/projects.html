@@ -18,6 +18,7 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Project Manager</th>
+                    <th>Start Date</th>
                     <th>Due Date</th>
                     <th>Actions</th>
                     <th>Delete Project</th>
@@ -28,6 +29,7 @@
                     <td th:text="${project.name}"></td>
                     <td th:text="${project.description}"></td>
                     <td th:text="${project.creator.name}"></td>
+                    <td th:text="${project.startDate}"></td>
                     <td th:text="${project.dueDate}"></td>
                     <td>
                         <!-- Check if the current project is in the list of projects associated with the user -->
