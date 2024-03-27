@@ -10,41 +10,78 @@
 <header>
     <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
 </header>
-<div class="container">
-    <div class="employee-list">
-        <h1>Employee List of Project</h1>
-        
-        <!-- Conditionally show the "Add Employee" section for admin users -->
-        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="add-employee-section">
-            <h2>Add Employee to Project</h2>
-            <form id="addEmployeeForm" class="employee-form">
-                <select name="userId" id="userId" class="select-box">
+<h1>Employee List of Project</h1>
+
+<div class="container" id="main-container">
+    <div class="employee-list add-employee-section">
+        <h2>Add Employee to Project</h2>
+        <input type="text" id="searchInput" onkeyup="filterAvailableUsers()" placeholder="Search for available employees...">
+        <form id="addEmployeeForm" class="employee-form">
+            <button class="btn add-btn" type="button" onclick="addEmployeeToProject()">Add Employee</button>
+            <table class="employee-table" id="availableUsersTable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Projects</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <!-- Populate with available users -->
-                    <option th:each="user : ${availableUsers}" th:value="${user.id}" th:text="${user.name}"></option>
-                </select>
-                <button class="btn add-btn" type="button" onclick="addEmployeeToProject()">Add Employee</button>
-            </form>
-        </div>
+                    <tr th:each="user : ${availableUsers}" class="employee-row">
+                        <td>
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="userId" th:value="${user.id}" th:id="'user_' + ${user.id}" class="custom-checkbox employee-checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </td>
+                        <td><span th:text="${user.name}"></span></td>
+                        <td><span th:text="${#lists.size(user.projects)}"></span></td>
+                        <td><span th:text="${user.email}"></span></td>
+                    </tr>
+                </tbody>
+                
+            </table>
+        </form>
     </div>
-    
-    <table class="employee-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <!-- Conditionally render the action column heading -->
-                <th th:if="${#authentication.principal.username == project.creator.email}" class="action-heading">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="employee : ${project.employees}">
-                <td th:text="${employee.name}" class="employee-name"></td>
-                <td>
-                    <!-- Conditionally render the delete button for the project creator -->
-                    <button th:if="${#authentication.principal.username == project.creator.email}" class="btn delete-btn" type="button" th:onclick="'removeEmployeeFromProject(\'' + ${employee.id} + '\')'">Delete</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+    <div class="employee-list project-employees-section" style="margin-top: 15px;">
+        <h2>Project Employees</h2>
+        <input type="text" id="searchInput" onkeyup="filterProjectEmployees()" placeholder="Search for project employees...">
+        <button class="btn delete-btn" type="button" onclick="removeSelectedEmployees()">Delete Selected</button>
+        <table class="employee-table" id="projectEmployeesTable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Projects</th>
+                    <th>Email</th>
+                    <!-- Conditionally render the action column heading -->
+                    <th th:if="${#authentication.principal.username == project.creator.email}" class="action-heading">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="employee : ${project.employees}">
+                    <td>
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="deleteEmployeeId" th:value="${employee.id}" class="custom-checkbox delete-employee-checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
+                    <td th:text="${employee.name}" class="employee-name"></td>
+
+                    <td th:text="${#lists.size(employee.projects)}" class="employee-name"></td>
+                    <td th:text="${employee.email}" class="employee-name"></td>
+                    <td>
+                        <!-- Conditionally render the delete button for the project creator -->
+                        <button th:if="${#authentication.principal.username == project.creator.email}" class="btn delete-btn" type="button" th:onclick="'removeEmployeeFromProject(\'' + ${employee.id} + '\')'">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+            
+        </table>
+    </div>
 </div>
 
 <!-- JavaScript function to handle adding employee to project -->
@@ -53,21 +90,41 @@
 
     function addEmployeeToProject() {
         var form = document.getElementById('addEmployeeForm');
-        var userId = form.userId.value;
-
-        fetch('/projects/' + projectId + '/employees/' + userId, {
-            method: 'PUT'
+        var checkboxes = form.getElementsByClassName('employee-checkbox');
+        var selectedUsers = [];
+    
+        // Iterate over checkboxes to find selected users
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedUsers.push(checkboxes[i].value);
+            }
+        }
+        console.log(selectedUsers)
+    
+        // If no users are selected, return
+        if (selectedUsers.length === 0) {
+            alert('Please select at least one employee.');
+            return;
+        }
+    
+        // Perform addition of selected employees to the project
+        fetch('/projects/' + projectId + '/employees', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedUsers)
         })
         .then(response => {
             if (response.ok) {
                 location.reload(); // Reload the page after successful addition
             } else {
-                alert('Failed to add employee to project.');
+                alert('Failed to add employee(s) to project.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Failed to add employee to project.');
+            alert('Failed to add employee(s) to project.');
         });
     }
 
@@ -91,6 +148,87 @@
         }
     }
 
+    // JavaScript function to filter available users based on search input
+    function filterAvailableUsers() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("availableUsersTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1]; // Index 1 for the "Name" column
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    // JavaScript function to filter project employees based on search input
+    function filterProjectEmployees() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchProjectInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("projectEmployeesTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1]; // Index 1 for the "Name" column
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    // JavaScript function to remove selected employees
+    function removeSelectedEmployees() {
+        var form = document.getElementById('projectEmployeesTable');
+        var checkboxes = form.getElementsByClassName('delete-employee-checkbox');
+        var selectedEmployees = [];
+    
+        // Iterate over checkboxes to find selected employees
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedEmployees.push(checkboxes[i].value);
+            }
+        }
+    
+        // If no employees are selected, return
+        if (selectedEmployees.length === 0) {
+            alert('Please select at least one employee to delete.');
+            return;
+        }
+    
+        // Perform deletion of selected employees from the project
+        if (confirm('Are you sure you want to delete the selected employees?')) {
+            fetch('/projects/' + projectId + '/employees', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(selectedEmployees)
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload(); // Reload the page after successful deletion
+                } else {
+                    alert('Failed to delete selected employees from the project.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to delete selected employees from the project.');
+            });
+        }
+    }
 </script>
 </body>
 </html>

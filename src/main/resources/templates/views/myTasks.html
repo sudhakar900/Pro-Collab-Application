@@ -13,10 +13,19 @@
 <div class="container">
     <div class="task-list">
         <h1>Tasks of User</h1>
+        <!-- Dropdown for project selection -->
+        <select id="projectSelect" onchange="filterTasks()">
+            <option value="">Select Project</option>
+            <!-- Iterate over each project -->
+            <th:block th:each="project : ${projects}">
+                <option th:value="${project.id}" th:text="${project.name}"></option>
+            </th:block>
+        </select>
+
         <!-- Check if projects is not null -->
         <th:block th:if="${projects != null}">
             <!-- Iterate over each project -->
-            <div th:each="project : ${projects}" class="project">
+            <div th:each="project : ${projects}" class="project" th:id="'project_' + ${project.id}" style="display: none;">
                 <h2 th:text="${project.name}"></h2>
                 <table class="task-table">
                     <thead>
@@ -50,5 +59,25 @@
         </th:block>
     </div>
 </div>
+
+<script>
+    function filterTasks() {
+        // Get the selected project id from the dropdown
+        var projectId = document.getElementById("projectSelect").value;
+        
+        // Hide all project sections
+        var projects = document.getElementsByClassName("project");
+        for (var i = 0; i < projects.length; i++) {
+            projects[i].style.display = "none";
+        }
+
+        // Show the selected project section
+        var selectedProject = document.getElementById("project_" + projectId);
+        if (selectedProject) {
+            selectedProject.style.display = "block";
+        }
+    }
+</script>
+
 </body>
 </html>

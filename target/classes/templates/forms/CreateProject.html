@@ -17,19 +17,45 @@
     <form id="projectForm">
         <label for="name">Project Name:</label>
         <input type="text" id="name" name="name" required>
-    
+        
         <label for="description">Project Description:</label>
         <textarea id="description" name="description" rows="4" required></textarea>
-    
-        <label for="dueDate">Due Date:</label>
-        <input type="date" id="dueDate" name="dueDate" required>
-    
+        
+        <div class="date">
+            <div class="dates" id="start">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" required onchange="updateDueDateMin()">
+            </div>
+            <div class="dates" id="end">
+                <label for="dueDate">Due Date:</label>
+                <input type="date" id="dueDate" name="dueDate" required>
+            </div>
+        </div>
+
         <button type="button" onclick="addProject()">Add Project</button>
     </form>
     
 </div>
 
 <script>
+    function updateDueDateMin() {
+        var startDateInput = document.getElementById('startDate');
+        var dueDateInput = document.getElementById('dueDate');
+        
+        // Get the selected start date
+        var startDate = new Date(startDateInput.value);
+        
+        // Set the minimum value of the due date input to be the next day after the start date
+        startDate.setDate(startDate.getDate() + 1); // Increment by 1 day
+        var minDate = startDate.toISOString().split('T')[0]; // Convert to ISO format
+        
+        dueDateInput.min = minDate;
+        
+        // Reset the due date if it's before the new minimum value
+        if (dueDateInput.value < minDate) {
+            dueDateInput.value = minDate;
+        }
+    }
     function addProject() {
         var form = document.getElementById('projectForm');
         var formData = new FormData(form);

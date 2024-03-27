@@ -81,3 +81,60 @@ table th {
 .task-link:hover {
   text-decoration: underline;
 }
+
+
+/* Style for task list */
+.task-list {
+  margin-top: 20px;
+}
+
+/* Style for dropdown */
+#projectSelect {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width:700px;
+}
+
+/* Style for project section */
+.project {
+  margin-top: 20px;
+}
+
+/* Style for table */
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+/* Style for table header */
+.task-table th {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+/* Style for table rows */
+.task-row {
+  border: 1px solid #ddd;
+}
+
+/* Style for table cells */
+.task-row td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Style for task link */
+.task-link {
+  text-decoration: none;
+  color: #007bff;
+}
+
+/* Style for task link on hover */
+.task-link:hover {
+  text-decoration: underline;
+}

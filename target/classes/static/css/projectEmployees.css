@@ -199,3 +199,353 @@ body {
   background-color: #45a049;
 }
 
+.add-employee-section {
+  margin-top: 20px;
+}
+
+.employee-form {
+  display: inline-block;
+}
+
+.employee-checkboxes {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.employee-checkbox {
+  margin-right: 10px;
+}
+
+.add-btn {
+  margin-top: 10px;
+}
+
+/* Style for the table-like layout */
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employee-table th,
+.employee-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.employee-table th {
+  background-color: #f2f2f2;
+}
+
+.employee-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.employee-table tr:hover {
+  background-color: #ddd;
+}
+.add-employee-section {
+  margin-top: 20px;
+}
+
+.employee-checkboxes {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.employee-checkbox {
+  display: block;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.employee-checkbox:last-child {
+  border-bottom: none;
+}
+
+.employee-checkbox label {
+  display: block;
+}
+
+.employee-checkbox input[type="checkbox"] {
+  display: inline-block;
+  margin-right: 10px;
+}
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.employee-table th,
+.employee-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.employee-table th {
+  background-color: #f2f2f2;
+}
+
+.employee-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.employee-table tr:hover {
+  background-color: #ddd;
+}
+
+.employee-checkboxes {
+  display: table;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.employee-checkbox {
+  display: table-row;
+  border-bottom: 1px solid #ccc;
+}
+
+.employee-checkbox label {
+  display: table-cell;
+  padding: 10px;
+}
+
+.employee-checkbox input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.employee-checkbox:last-child {
+  border-bottom: none;
+}
+#main-container {
+  display: flex;
+  width: 100%;
+  max-width: 98%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  max-height: 99vh;
+}
+#main-container {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Style for the add employee section */
+.add-employee-section {
+  flex: 1;
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px;
+}
+
+/* Style for the project employees section */
+.project-employees-section {
+  flex: 1;
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px;
+}
+
+/* Style for the employee tables */
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employee-table th,
+.employee-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.employee-table th {
+  background-color: #f2f2f2;
+}
+
+.employee-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.employee-table tr:hover {
+  background-color: #ddd;
+}
+
+.employee-table tbody {
+  max-height: 400px; /* Limit the maximum height of the tables */
+  overflow-y: auto; /* Enable vertical scrolling within the tables */
+}
+/* projectEmployees.css */
+
+/* Style for the search input */
+#searchInput {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+/* Style for the form */
+.employee-form {
+  margin-bottom: 20px; /* Add some space below the form */
+}
+
+/* Style for the button */
+.add-btn {
+  background-color: #007bff; /* Blue color for the button */
+  color: white; /* White text color */
+  padding: 8px 16px; /* Padding for the button */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+/* Style for the table */
+.employee-table {
+  width: 100%; /* Make the table fill the entire width of its container */
+  border-collapse: collapse; /* Collapse table borders */
+  margin-bottom: 20px; /* Add some space below the table */
+}
+
+/* Style for table headers */
+.employee-table th {
+  background-color: #f8f9fa; /* Light gray background color */
+  border: 1px solid #dee2e6; /* Gray border */
+  padding: 8px; /* Padding for the headers */
+  text-align: left; /* Align text to the left */
+}
+
+/* Style for table rows */
+.employee-table tr {
+  border: 1px solid #dee2e6; /* Gray border */
+}
+
+/* Style for alternating row colors */
+.employee-table tr:nth-child(even) {
+  background-color: #f8f9fa; /* Light gray background color */
+}
+
+/* Style for table cells */
+.employee-table td {
+  padding: 8px; /* Padding for the cells */
+}
+
+/* Style for the checkbox */
+.employee-checkbox {
+  margin-right: 8px; /* Add some space to the right of the checkbox */
+}
+/* Style for the table */
+.employee-table {
+  width: 100%; /* Make the table fill the entire width of its container */
+  border-collapse: collapse; /* Collapse table borders */
+  margin-bottom: 20px; /* Add some space below the table */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+/* Style for table headers */
+.employee-table th {
+  background-color: #007bff; /* Blue background color */
+  color: white; /* White text color */
+  border: none; /* Remove border */
+  padding: 12px; /* Padding for the headers */
+  text-align: left; /* Align text to the left */
+}
+
+/* Style for table rows */
+.employee-table tr {
+  border-bottom: 1px solid #dee2e6; /* Gray border at the bottom of each row */
+}
+
+/* Style for alternating row colors */
+.employee-table tr:nth-child(even) {
+  background-color: #f8f9fa; /* Light gray background color */
+}
+
+/* Style for table cells */
+.employee-table td {
+  padding: 12px; /* Padding for the cells */
+}
+
+/* Hover effect for table rows */
+.employee-table tr:hover {
+  background-color: #f1f1f1; /* Lighter gray background color on hover */
+}
+
+/* Style for the checkbox */
+.employee-checkbox {
+  margin-right: 8px; /* Add some space to the right of the checkbox */
+}
+.employee-form{
+  width: 100%;
+}
+.delete-btn{
+  margin-top: 10px;
+}
+/* Style for the checkbox container */
+.checkbox-container {
+  display: inline-block;
+  position: relative;
+  padding-left: 25px; /* Adjust the padding to create space for the custom checkbox */
+  margin-bottom: 12px; /* Add some space below each checkbox */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  font-size: 16px; /* Set font size */
+
+}
+
+/* Style for the custom checkbox */
+.custom-checkbox {
+  position: absolute;
+  opacity: 0; /* Hide the actual checkbox */
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+/* Style for the custom checkbox tickmark */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px; /* Set the height of the checkbox */
+  width: 20px; /* Set the width of the checkbox */
+  background-color: #afacac; /* Default background color */
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Style for the custom checkbox tickmark when checked */
+.custom-checkbox:checked ~ .checkmark {
+  background-color: #43d20f; /* Change background color when checked */
+}
+
+/* Style for the checkmark icon */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 7px; /* Position the checkmark icon */
+  top: 3px;
+  width: 6px; /* Set the width of the checkmark */
+  height: 12px; /* Set the height of the checkmark */
+  border: solid white; /* White border for the checkmark icon */
+  border-width: 0 3px 3px 0; /* Create the checkmark shape */
+  transform: rotate(45deg); /* Rotate the checkmark icon */
+}
+
+/* Show the checkmark icon when the custom checkbox is checked */
+.custom-checkbox:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style for the checkmark icon color when checked */
+.custom-checkbox:checked ~ .checkmark:after {
+  border-color: white; /* Change the color of the checkmark icon when checked */
+}
