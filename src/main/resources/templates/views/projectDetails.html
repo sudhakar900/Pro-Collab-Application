@@ -34,7 +34,6 @@
         <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/task/create/' + ${project.id}}" class="btn create-task-btn">Create Task</a>
         
         <a  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/projects/tasks/' + ${project.id}}" class="btn view-tasks-btn">View Project Tasks</a>
-        <a  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/project/createTeam/' + ${project.id}}" class="btn create-team-btn">Create Team</a>
         <a th:href="@{'/project/'+ ${project.id} +'/teams'}" class="btn view-teams-btn">View Teams</a>
 
     </div>

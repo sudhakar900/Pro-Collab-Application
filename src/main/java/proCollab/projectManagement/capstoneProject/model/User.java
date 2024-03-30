@@ -32,6 +32,8 @@ public class User {
     @NotEmpty(message = "{user.name.not.empty}")
     private String name;
 
+    private long employeeId;
+
     @NotEmpty(message = "{user.password.not.empty}")
     @Length(min = 5, message = "{user.password.length}")
     private String password;
@@ -333,6 +335,14 @@ public class User {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(long employeeId) {
+        this.employeeId = employeeId;
     }
 
 }
