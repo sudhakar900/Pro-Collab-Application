@@ -5,7 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import proCollab.projectManagement.capstoneProject.model.Company;
 import proCollab.projectManagement.capstoneProject.model.Project;
@@ -96,6 +103,40 @@ public class ProjectController {
         }
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/mapUsersToProject")
+    public ResponseEntity<Void> mapUsersToProject(@RequestParam("file") MultipartFile file,
+            @RequestParam("projectId") Long projectId) {
+        try {
+            Project project = projectService.getProjectById(projectId); // Assuming you have a method to get project by ID
+            if (project == null) {
+                return ResponseEntity.notFound().build(); // Project not found
+            }
+    
+            Workbook workbook = WorkbookFactory.create(file.getInputStream());
+            Sheet sheet = workbook.getSheetAt(0);
+    
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) {
+                    continue; // Skip header row
+                }
+    
+                String email = row.getCell(0).getStringCellValue();
+    
+                User user = userService.getUserByEmail(email);
+                if (user != null && !projectService.isUserPresentInProject(project, user)) {
+                    projectService.addEmployeeToProject(projectId, user);
+                }
+            }
+    
+            workbook.close();
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    
 
     @DeleteMapping("/{projectId}/employees/{userId}")
     public ResponseEntity<Void> removeEmployeeFromProject(@PathVariable Long projectId, @PathVariable Long userId) {
