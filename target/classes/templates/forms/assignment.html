@@ -5,131 +5,7 @@
 <head>
     <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
     <title>Assign Tasks</title>
-    <style>
-        /* Global styles */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        /* Header styles */
-        header {
-            background-color: #343a40;
-            color: #ffffff;
-            padding: 10px 0;
-            text-align: center;
-        }
-        
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        
-        /* Card styles */
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
-            margin-bottom: 20px;
-        }
-        
-        .card-header {
-            background-color: #343a40;
-            color: #ffffff;
-            border-radius: 10px 10px 0 0;
-            padding: 10px 20px;
-        }
-        
-        .card-body {
-            padding: 20px;
-        }
-        
-        .card-deck {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content:left;
-        }
-        
-        .user {
-            width: calc(25% - 20px);
-            margin-bottom: 20px;
-        }
-        
-        .card-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto;
-        }
-        
-        .card-title {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 5px;
-        }
-        
-        .card-text {
-            text-align: center;
-            color: #6c757d;
-            margin-bottom: 0;
-        }
-        
-        /* Search input styles */
-        #searchInput {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            box-sizing: border-box;
-            border: 2px solid #343a40;
-            border-radius: 5px;
-            font-size: 16px;
-            background-color: #ffffff;
-            background-image: url('search-icon.png');
-            background-position: 10px 10px;
-            background-repeat: no-repeat;
-            padding-left: 40px;
-        }
-        
-        /* Footer styles */
-        footer {
-            background-color: #343a40;
-            color: #ffffff;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
-    <script>
-        function filterUsers() {
-            var input, filter, users, user, name;
-            input = document.getElementById('searchInput');
-            filter = input.value.toUpperCase();
-            users = document.getElementsByClassName('user');
-            for (var i = 0; i < users.length; i++) {
-                user = users[i];
-                name = user.getElementsByClassName('card-title')[0];
-                if (name.innerText.toUpperCase().indexOf(filter) > -1) {
-                    user.style.display = '';
-                } else {
-                    user.style.display = 'none';
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" th:href="@{/css/assignment.css}">
 </head>
 
 <body>
@@ -140,13 +16,14 @@
 </header>
 
 <main class="container">
-    <div class="card">
+    <div class="card" id="cardView" style="display: none;">
         <div class="card-header">
             <h2>Assign tasks to users</h2>
+            <button class="toggle-button" onclick="switchLayout()">Switch to Table View</button>
         </div>
         <div class="card-body">
             <h3>Choose a user</h3>
-            <input type="text" id="searchInput" onkeyup="filterUsers()" placeholder="Search for a user...">
+            <input type="text" id="searchInput" class="searchInput" onkeyup="filterUsers()" placeholder="Search for a user...">
             <div class="card-deck">
                 <div th:each="user: ${users}" class="user">
                     <a th:href="'/assignment/' + ${user.id}" class="text-decoration-none text-dark">
@@ -165,12 +42,40 @@
             </div>
         </div>
     </div>
-</main>
 
+    <div class="card" id="tableView">
+        <div class="card-header">
+            <h2>Assign tasks to users</h2>
+            <button class="toggle-button" onclick="switchLayout()">Switch to Card View</button>
+        </div>
+        <div class="card-body">
+            <h3>Choose a user</h3>
+            <input type="text" id="searchInputTable" class="searchInput" onkeyup="filterTableUsers()" placeholder="Search for a user...">
+            <table id="usersTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Tasks in Progress</th>
+                        <th>Assign Tasks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Populate the table with user data dynamically -->
+                    <tr class="tableUser" th:each="user: ${users}">
+                        <td class="table-title" th:text="${user.name}"></td>
+                        <td th:text="${user.getTasksInProgress().size()}">0</td>
+                        <td><a th:href="'/assignment/' + ${user.id}" class="assign-button">Assign</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
 
 <!--remain scroll position after redirect-->
 <script src="js/main.js"></script>
 <script src="js/loading.js"></script>
+<script src="js/assignment.js"></script>
 
 </body>
 </html>

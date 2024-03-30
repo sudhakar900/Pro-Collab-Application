@@ -12,7 +12,7 @@
     <header class="header">
         <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
     </header>
-    <form th:action="@{'/project/' + ${project.id} + '/createTeam'}" method="post" class="form">
+    <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:action="@{'/project/' + ${project.id} + '/createTeam'}" method="post" class="form">
         <h1>Create Team</h1>
         <label for="name">Team Name:</label>
         <input type="text" name="name" required>
@@ -38,6 +38,8 @@
                         <td class="team-actions">
                             <a class="button button-details" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
                                th:href="@{'/project/teams/' + ${team.project.id} + '/addUser/' + ${team.id}}">Team Details</a>
+                               <a class="button  button-details delete-btn" style="background-color: red;" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                               th:href="@{'/project/teams/' + ${team.project.id} + '/deleteTeam/' + ${team.id}}">Delete Team</a>
                             <a class="button button-members" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}"
                                th:href="@{'/project/teams/' + ${team.project.id} + '/addUser/' + ${team.id}}">View Team Members</a>
                         </td>

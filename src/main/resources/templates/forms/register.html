@@ -20,6 +20,7 @@
                     <div class="text text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                     <input type="email" th:field="*{email}" id="email" placeholder="E-mail" />
                     <div class="text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    <input type="text" id="employeeId" th:field="*{employeeId}" placeholder="EmployeeId" />
                     <input type="password" id="password" th:field="*{password}" placeholder="Password" />
                     <div class="text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                     <input type="hidden" class="form-control" id="photo" name="photo" th:attr="value = ${'images/user.png'}" />
@@ -33,7 +34,7 @@
                    
 
                     <div class="check">
-                        <input type="checkbox" onclick="checkTerms()" id="agree-terms" />
+                        <input type="checkbox" onclick="checkTerms()" id="agree-terms" required/>
                         <label for="agree-terms">Agree to <a href="#">Terms &amp; Conditions</a></label>
                     </div>
                     <button type="submit" value="Submit" id="signup_submit" class="button sign-up-btn">Sign Up</button>

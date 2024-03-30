@@ -6,6 +6,7 @@ import org.springframework.security.web.servletapi.SecurityContextHolderAwareReq
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -84,6 +85,9 @@ public class TaskController {
         Iterator<Task> taskIterator = allTask.iterator();
         while (taskIterator.hasNext()) {
             Task t = taskIterator.next();
+            if (t.getProject() == null && t.getCreatedUser() != signedUser) {
+                taskIterator.remove();
+            }
             if (t.getProject() != null && !usersProjects.contains(t.getProject())) {
                 taskIterator.remove();
             }
@@ -201,6 +205,18 @@ public class TaskController {
         return "redirect:/tasks";
     }
 
+    @PostMapping("/task/taskDetails/{projectId}/mark-done/{id}")
+    public String setTaskDetailsCompleted(@PathVariable long projectId, @PathVariable Long id) {
+        Task task = taskService.getTaskById(id);
+        boolean isCompleted = task.isCompleted();
+        if (isCompleted) {
+            taskService.setTaskNotCompleted(id);
+        } else {
+            taskService.setTaskCompleted(id);
+        }
+        return "redirect:/projects/projectTasks/" + projectId + "/taskDetails/" + id;
+    }
+
     @GetMapping("/projects/projectTasks/{projectId}/taskDetails/{taskId}")
     public String taskDetails(@PathVariable("projectId") long projectId, @PathVariable("taskId") long taskId,
             Model model) {
@@ -247,5 +263,11 @@ public class TaskController {
         redirectAttributes.addAttribute("taskId", taskId);
 
         return "redirect:/projects/projectTasks/{projectId}/taskDetails/{taskId}";
+    }
+
+    @PostMapping("/project/{projectId}/tasks/{taskId}")
+    public String deleteTask(@PathVariable long projectId, @PathVariable long taskId) {
+        taskService.deleteTask(taskId);
+        return "redirect:/projects/tasks/" + projectId;
     }
 }

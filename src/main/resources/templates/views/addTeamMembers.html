@@ -12,7 +12,7 @@
     <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
 </header>
 <div class="container" id="container">
-    <div class="employee-list">
+    <div class="employee-list" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
         <h1>Employee List For Teams</h1>
         
         <!-- Conditionally show the "Add Employee" section for admin users -->
@@ -73,7 +73,7 @@
         
     </table>
     <!-- Button to delete selected users -->
-    <button class="delete-btn btn" type="button" th:onclick="'deleteSelectedUsers(' + ${projectId} + ',' + ${teamId} + ')'">Delete Selected</button>
+    <button class="delete-btn btn" type="button" th:onclick="'deleteSelectedUsers(' + ${projectId} + ',' + ${teamId} + ')'" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">Delete Selected</button>
    </div>
 </div>
 

@@ -17,6 +17,7 @@
         <p class="project-description" th:text="${project.description}"></p>
 
         <p class="project-manager">Project Manager: <span th:text="${project.creator.name}"></span></p>
+        <p class="due-date">Start Date: <span th:text="${project.startDate}"></span></p>
         <p class="due-date">Due Date: <span th:text="${project.dueDate}"></span></p>
         <form  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="complete-form" th:action="@{/projects/markComplete/{projectId}(projectId=${project.id})}" method="post">
             <label class="complete-label">

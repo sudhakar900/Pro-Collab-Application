@@ -47,25 +47,6 @@ public class AssigmentController {
         this.projectService = projectService;
     }
 
-    public List<Task> freeTasks(Principal principal, long userId) {
-        String email = principal.getName();
-        User user = userService.getUserByEmail(email);
-        List<Task> task = taskService.findFreeTasks();
-        List<Task> companyTask = new ArrayList<>();
-        long company_id = user.getCompany().getId();
-        for (Task t : task) {
-            if (companyService.isUserPresentInCompany(t.getCreatedUser(), company_id)) {
-                Project project = t.getProject();
-                User employee = userService.getUserById(userId);
-                if (projectService.isUserPresentInProject(project, employee)
-                        && projectService.isUserPresentInProject(project, user)) {
-                    companyTask.add(t);
-                }
-            }
-        }
-        return companyTask;
-    }
-
     @GetMapping
     public String showAssigmentForm(Principal principal, Model model) {
         String email = principal.getName();
@@ -99,6 +80,28 @@ public class AssigmentController {
 
     }
 
+    public List<Task> freeTasks(Principal principal, long userId) {
+        String email = principal.getName();
+        User user = userService.getUserByEmail(email);
+        List<Task> task = taskService.findFreeTasks();
+        List<Task> companyTask = new ArrayList<>();
+        long company_id = user.getCompany().getId();
+        for (Task t : task) {
+            if (t.getProject() == null && (t.getCreatedUser() != null && t.getCreatedUser().getId() == user.getId())) {
+                companyTask.add(t);
+            } else if (companyService.isUserPresentInCompany(t.getCreatedUser(), company_id)) {
+                Project project = t.getProject();
+                User employee = userService.getUserById(userId);
+                if (projectService.isUserPresentInProject(project, employee)
+                        && projectService.isUserPresentInProject(project, user)) {
+                    companyTask.add(t);
+                }
+            }
+        }
+
+        return companyTask;
+    }
+
     @GetMapping("/{userId}")
     public String showUserAssigmentForm(@PathVariable Long userId, Model model, Principal principal) {
         String email = principal.getName();
@@ -115,9 +118,30 @@ public class AssigmentController {
     public String assignTaskToUser(@PathVariable Long userId, @PathVariable Long taskId) {
         Task selectedTask = taskService.getTaskById(taskId);
         User selectedUser = userService.getUserById(userId);
+        Teams userTeam = findTeam(selectedTask, selectedUser);
+        if (userTeam != null) {
+            selectedTask.setTeam(userTeam);
+        }
         taskService.assignTaskToUser(selectedTask, selectedUser);
         emailService.sendTaskMail(selectedUser.getEmail(), selectedTask);
         return "redirect:/assignment/" + userId;
+    }
+
+    public Teams findTeam(Task task, User user) {
+        Project project = task.getProject();
+        List<Project> userProjects = user.getProjects();
+        for (Project p : userProjects) {
+            if (p == project) {
+                List<Teams> projectTeams = p.getTeams();
+                List<Teams> userTeams = user.getTeams();
+                for (Teams t : userTeams) {
+                    if (projectTeams.contains(t)) {
+                        return t;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     @GetMapping("unassign/{userId}/{taskId}")

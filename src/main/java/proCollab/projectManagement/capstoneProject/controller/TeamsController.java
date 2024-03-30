@@ -24,6 +24,7 @@ import proCollab.projectManagement.capstoneProject.model.Project;
 import proCollab.projectManagement.capstoneProject.model.Task;
 import proCollab.projectManagement.capstoneProject.model.Teams;
 import proCollab.projectManagement.capstoneProject.model.User;
+import proCollab.projectManagement.capstoneProject.repository.TaskRepository;
 import proCollab.projectManagement.capstoneProject.repository.TeamRepository;
 import proCollab.projectManagement.capstoneProject.service.ProjectService;
 import proCollab.projectManagement.capstoneProject.service.TaskService;
@@ -45,6 +46,8 @@ public class TeamsController {
 
     @Autowired
     private TeamRepository repo;
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Autowired
     public TeamsController(ProjectService projectService, UserService userService, TeamService teamService,
@@ -104,6 +107,27 @@ public class TeamsController {
         model.addAttribute("teamId", teamId);
         model.addAttribute("teamUsers", teamUsers);
         return "views/addTeamMembers";
+    }
+
+    @GetMapping("/teams/{projectId}/deleteTeam/{teamId}")
+    public String deleteTeam(@PathVariable("projectId") long projectId, @PathVariable("teamId") long teamId) {
+        Teams team = teamService.getTeamById(teamId).get();
+        List<User> users = team.getUsers();
+        for (User u : users) {
+            List<Teams> userTeams = u.getTeams();
+            userTeams.remove(team);
+            u.setTeams(userTeams);
+            userService.saveUser(u);
+            List<Task> projectTask = projectService.getProjectById(projectId).getTasks();
+            for (Task t : projectTask) {
+                if (t.getTeam() != null && t.getTeam().getId() == teamId) {
+                    t.setTeam(null);
+                    taskRepository.save(t);
+                }
+            }
+        }
+        repo.deleteById(teamId);
+        return "redirect:/project/" + projectId + "/teams";
     }
 
     @PostMapping("/assignment/delete/project/{projectId}/team/{teamId}/users")
