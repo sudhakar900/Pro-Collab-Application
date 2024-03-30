@@ -63,12 +63,6 @@ public class BulkUploadServiceImpl implements BulkUploadService {
                 user.setEmployeeId(employeeId);
                 String password = generateRandomPassword();
                 user.setPassword(new BCryptPasswordEncoder().encode(password));
-
-                // Company company =
-                // companyRepository.findByName(currentRow.getCell(3).getStringCellValue());
-                // if (company == null) {
-                // continue;
-                // }
                 user.setCompany(company);
                 user.setPhoto("images/admin.jpg");
 
