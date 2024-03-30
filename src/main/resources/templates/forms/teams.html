@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teams</title>
+    <link rel="stylesheet" th:href="@{/css/createTeam.css}">
     <link rel="stylesheet" th:href="@{/css/viewTeams.css}">
     <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
 </head>
@@ -11,6 +12,15 @@
     <header class="header">
         <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
     </header>
+    <form th:action="@{'/project/' + ${project.id} + '/createTeam'}" method="post" class="form">
+        <h1>Create Team</h1>
+        <label for="name">Team Name:</label>
+        <input type="text" name="name" required>
+        
+        <!-- Add more fields as needed -->
+        
+        <button type="submit">Create Team</button>
+    </form>
     <div class="container">
         <h1 class="heading">Available Teams</h1>
         <div class="table-container">

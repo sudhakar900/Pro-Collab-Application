@@ -76,6 +76,8 @@ public class TeamsController {
     public String getTeams(@PathVariable("id") Long id, Model model) {
         List<Teams> teams = repo.findAllByProjectId(id);
         model.addAttribute("teams", teams);
+        Project project = projectService.getProjectById(id);
+        model.addAttribute("project", project);
         return "forms/teams";
     }
 
@@ -104,33 +106,38 @@ public class TeamsController {
         return "views/addTeamMembers";
     }
 
-    @GetMapping("/assignment/delete/project/{projectId}/team/{teamId}/user/{userId}")
-    public String deleteFromTeam(@PathVariable long projectId, @PathVariable long teamId, @PathVariable long userId) {
+    @PostMapping("/assignment/delete/project/{projectId}/team/{teamId}/users")
+    public String deleteFromTeam(@PathVariable long projectId, @PathVariable long teamId,
+            @RequestBody List<Long> userIds) {
         Project project = projectService.getProjectById(projectId);
         Teams team = teamService.getTeamById(teamId).orElseThrow(() -> new IllegalArgumentException("Team not found"));
-        User user = userService.getUserById(userId);
         List<User> users = team.getUsers();
         List<Task> projectTask = project.getTasks();
-        List<Task> taskList = user.getTasksOwned();
-        for (Task t : taskList) {
-            if (projectTask.contains(t)) {
-                t.setOwner(null);
-                taskService.updateTask(t.getId(), t);
+        for (Long userId : userIds) {
+            User user = userService.getUserById(userId);
+            List<Task> taskList = user.getTasksOwned();
+            for (Task t : taskList) {
+                if (projectTask.contains(t)) {
+                    t.setOwner(null);
+                    taskService.updateTask(t.getId(), t);
+                }
             }
+            users.remove(user);
         }
-        users.remove(user);
         team.setUsers(users);
         teamService.createTeam(team);
         return "redirect:/project/teams/" + projectId + "/addUser/" + teamId;
     }
 
-    @PostMapping("/{projectId}/teams/{teamId}/addUsers/{userId}")
+    @PostMapping("/{projectId}/teams/{teamId}/addUsers")
     public ResponseEntity<Void> addUsersToTeam(@PathVariable Long projectId, @PathVariable Long teamId,
-            @PathVariable Long userId) {
+            @RequestBody List<Long> userIds) {
         Teams team = teamService.getTeamById(teamId).get();
-        User user = userService.getUserById(userId);
-        team.getUsers().add(user);
-        teamService.saveTeam(team);
+        for (Long userId : userIds) {
+            User user = userService.getUserById(userId);
+            team.getUsers().add(user);
+            teamService.saveTeam(team);
+        }
         return ResponseEntity.ok().build();
     }
 

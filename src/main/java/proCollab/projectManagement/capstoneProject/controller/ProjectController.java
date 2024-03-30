@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import proCollab.projectManagement.capstoneProject.model.Company;
 import proCollab.projectManagement.capstoneProject.model.Project;
 import proCollab.projectManagement.capstoneProject.model.Task;
+import proCollab.projectManagement.capstoneProject.model.Teams;
 import proCollab.projectManagement.capstoneProject.model.User;
 import proCollab.projectManagement.capstoneProject.repository.TeamRepository;
 import proCollab.projectManagement.capstoneProject.service.ProjectService;
@@ -106,8 +107,27 @@ public class ProjectController {
     @DeleteMapping("/{projectId}/employees")
     public ResponseEntity<Void> removeSelectedEmployeesFromProject(@PathVariable Long projectId,
             @RequestBody List<Long> userIds) {
+        Project project = projectService.getProjectById(projectId);
+        List<Teams> projectTeams = project.getTeams();
+        List<Task> projectTask = project.getTasks();
         for (Long userId : userIds) {
             User user = userService.getUserById(userId);
+            List<Teams> userTeams = user.getTeams();
+            for (Teams t : userTeams) {
+                if (projectTeams.contains(t)) {
+                    List<User> users = t.getUsers();
+                    List<Task> taskList = user.getTasksOwned();
+                    for (Task ta : taskList) {
+                        if (projectTask.contains(ta)) {
+                            ta.setOwner(null);
+                            taskService.updateTask(ta.getId(), ta);
+                        }
+                    }
+                    users.remove(user);
+                    t.setUsers(users);
+                    teamRepository.save(t);
+                }
+            }
             projectService.removeEmployeeFromProject(projectId, user);
         }
         return ResponseEntity.ok().build();

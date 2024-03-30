@@ -13,7 +13,7 @@
     </header>
     <div class="container">
         <h1 class="heading">Task Details</h1>
-        <a th:href="@{'/task/edit/' + ${task.id}}">
+        <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/task/edit/' + ${task.id}}">
             <span class="edit-button">Edit</span>
         </a>
                 <div class="task-info">
