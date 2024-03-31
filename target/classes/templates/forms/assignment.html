@@ -34,6 +34,9 @@
                                 <p class="card-text">
                                     <small>Tasks in progress:</small>
                                     <span th:text="${user.getTasksInProgress().size()}">0</span>
+                                    <br>
+                                    <small>Allocated Story Points:</small>
+                                    <span th:text="${user.getAllocatedStoryPoints()}">0</span>
                                 </p>
                             </div>
                         </div>
@@ -56,14 +59,17 @@
                     <tr>
                         <th>Name</th>
                         <th>Tasks in Progress</th>
-                        <th>Assign Tasks</th>
+                        <th>Allocated Story Points</th> <!-- New column for allocated story points -->
+                        <th>Assigned Tasks</th> <!-- Renamed column -->
                     </tr>
                 </thead>
+                
                 <tbody>
                     <!-- Populate the table with user data dynamically -->
                     <tr class="tableUser" th:each="user: ${users}">
                         <td class="table-title" th:text="${user.name}"></td>
                         <td th:text="${user.getTasksInProgress().size()}">0</td>
+                        <td th:text="${user.allocatedStoryPoints}"></td>
                         <td><a th:href="'/assignment/' + ${user.id}" class="assign-button">Assign</a></td>
                     </tr>
                 </tbody>

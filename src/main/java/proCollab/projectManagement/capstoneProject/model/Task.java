@@ -29,6 +29,7 @@ public class Task {
     private boolean isCompleted;
     private String creatorName;
     private String action;
+    private int storyPoints;
     @ManyToOne
     @JoinColumn(name = "OWNER_ID")
     private User owner;
@@ -106,6 +107,14 @@ public class Task {
         this.owner = owner;
         this.createdUser = createdUser;
         this.project = project;
+    }
+
+    public int getStoryPoints() {
+        return storyPoints;
+    }
+
+    public void setStoryPoints(int storyPoints) {
+        this.storyPoints = storyPoints;
     }
 
     public Project getProject() {

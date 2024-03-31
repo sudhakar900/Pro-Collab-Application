@@ -34,6 +34,7 @@ public class User {
 
     private long employeeId;
 
+    private long allocatedStoryPoints;
     @NotEmpty(message = "{user.password.not.empty}")
     @Length(min = 5, message = "{user.password.length}")
     private String password;
@@ -146,6 +147,14 @@ public class User {
         this.tasksOwned = tasksOwned;
         this.notesOwned = notesOwned;
         this.roles = roles;
+    }
+
+    public long getAllocatedStoryPoints() {
+        return allocatedStoryPoints;
+    }
+
+    public void setAllocatedStoryPoints(long allocatedStoryPoints) {
+        this.allocatedStoryPoints = allocatedStoryPoints;
     }
 
     public Long getId() {

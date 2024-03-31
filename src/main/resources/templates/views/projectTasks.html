@@ -18,8 +18,10 @@
             <tr>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Date</th>
+                <th>Due Date</th>
+                <th>Assigned To</th>
                 <th>Details</th>
+                <th>Status</th>
             </tr>
             </thead>
             <tbody>
@@ -27,7 +29,9 @@
                 <td th:text="${task.name}"></td>
                 <td th:text="${task.description}"></td>
                 <td th:text="${task.date}"></td>
+                <td th:text="${task.owner != null ? task.owner.name : 'Unassigned'}"></td>
                 <td><a th:href="@{/projects/projectTasks/{projectId}/taskDetails/{taskId}(projectId=${project.id},taskId=${task.id})}">Details</a></td>
+                <td th:text="${task.isCompleted ? 'Completed' : 'Not Completed'}"></td>
             </tr>
             </tbody>
         </table>

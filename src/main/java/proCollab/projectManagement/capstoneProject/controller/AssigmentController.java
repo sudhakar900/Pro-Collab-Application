@@ -67,6 +67,7 @@ public class AssigmentController {
     @GetMapping("/project/{projectId}/task/{taskId}/assign/{userId}")
     public String assignToUser(@PathVariable long projectId, @PathVariable long taskId, @PathVariable long userId) {
         Task task = taskService.getTaskById(taskId);
+        User prevUser = task.getOwner();
         User user = userService.getUserById(userId);
         List<Teams> userTeams = user.getTeams();
         for (Teams t : userTeams) {
@@ -75,7 +76,16 @@ public class AssigmentController {
             }
         }
         taskService.assignTaskToUser(task, user);
+        if (prevUser != null) {
+            int storyPoints = calculateStoryPoints(prevUser);
+            prevUser.setAllocatedStoryPoints(storyPoints);
+            userService.saveUser(prevUser);
+        }
+        int storyPoints = calculateStoryPoints(prevUser);
+        prevUser.setAllocatedStoryPoints(storyPoints);
+        userService.saveUser(prevUser);
         emailService.sendTaskMail(user.getEmail(), task);
+
         return "redirect:/projects/projectTasks/" + projectId + "/taskDetails/" + taskId;
 
     }
@@ -117,14 +127,31 @@ public class AssigmentController {
     @GetMapping("/assign/{userId}/{taskId}")
     public String assignTaskToUser(@PathVariable Long userId, @PathVariable Long taskId) {
         Task selectedTask = taskService.getTaskById(taskId);
+        User prevUser = selectedTask.getOwner();
+
         User selectedUser = userService.getUserById(userId);
         Teams userTeam = findTeam(selectedTask, selectedUser);
         if (userTeam != null) {
             selectedTask.setTeam(userTeam);
         }
         taskService.assignTaskToUser(selectedTask, selectedUser);
+        selectedUser.setAllocatedStoryPoints(calculateStoryPoints(selectedUser));
+        userService.saveUser(selectedUser);
+        if (prevUser != null) {
+            prevUser.setAllocatedStoryPoints(calculateStoryPoints(prevUser));
+            userService.saveUser(prevUser);
+        }
         emailService.sendTaskMail(selectedUser.getEmail(), selectedTask);
         return "redirect:/assignment/" + userId;
+    }
+
+    public int calculateStoryPoints(User user) {
+        List<Task> task = user.getTasksOwned();
+        int res = 0;
+        for (Task t : task) {
+            res += t.getStoryPoints();
+        }
+        return res;
     }
 
     public Teams findTeam(Task task, User user) {
@@ -147,7 +174,10 @@ public class AssigmentController {
     @GetMapping("unassign/{userId}/{taskId}")
     public String unassignTaskFromUser(@PathVariable Long userId, @PathVariable Long taskId) {
         Task selectedTask = taskService.getTaskById(taskId);
-        taskService.unassignTask(selectedTask);
+        User user = userService.getUserById(userId);
+        taskService.unassignTask(selectedTask, user);
+        user.setAllocatedStoryPoints(calculateStoryPoints(user));
+        userService.saveUser(user);
         return "redirect:/assignment/" + userId;
     }
 
@@ -179,10 +209,17 @@ public class AssigmentController {
             @PathVariable long taskId) {
         Project project = projectService.getProjectById(projectId);
         Task task = taskService.getTaskById(taskId);
+        if (task.getOwner() != null) {
+            User user = task.getOwner();
+            user.setAllocatedStoryPoints(calculateStoryPoints(user));
+            userService.saveUser(user);
+        }
         User user = userService.getUserById(userId);
         Teams team = teamRepository.getById(teamId);
         task.setTeam(team);
         taskService.assignTaskToUser(task, user);
+        user.setAllocatedStoryPoints(calculateStoryPoints(user));
+        userService.saveUser(user);
         emailService.sendTaskMail(user.getEmail(), task);
         return "redirect:/assignment/project/{projectId}/team/{teamId}/user/{userId}";
     }
@@ -194,7 +231,10 @@ public class AssigmentController {
         Task task = taskService.getTaskById(taskId);
         task.setTeam(null);
         task.setAction("UnAssigned");
-        taskService.unassignTask(task);
+        User user = userService.getUserById(userId);
+        taskService.unassignTask(task, user);
+        user.setAllocatedStoryPoints(calculateStoryPoints(user));
+        userService.saveUser(user);
         return "redirect:/assignment/project/{projectId}/team/{teamId}/user/{userId}";
     }
 

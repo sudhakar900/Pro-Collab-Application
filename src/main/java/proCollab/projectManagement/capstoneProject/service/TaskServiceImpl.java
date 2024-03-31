@@ -18,29 +18,32 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
+
     private TaskRepository taskRepository;
     private TaskHistoryService taskHistoryService;
     private TaskHistoryRepository taskHistoryRepository;
+    private UserService userService;
 
     @Autowired
     public TaskServiceImpl(TaskRepository taskRepository, TaskHistoryService taskHistoryService,
-            TaskHistoryRepository taskHistoryRepository) {
+            TaskHistoryRepository taskHistoryRepository, UserService userService) {
         this.taskRepository = taskRepository;
         this.taskHistoryRepository = taskHistoryRepository;
         this.taskHistoryService = taskHistoryService;
+        this.userService = userService;
     }
 
     @Override
     public void createTask(Task task) {
-        task.setAction("UnAssigned");
+        task.setAction("Unassigned");
         taskRepository.save(task);
         LocalDateTime date = LocalDateTime.now();
         TaskHistory taskHistory = new TaskHistory();
         taskHistory.setTask(task);
         taskHistory.setAction("Not Assigned");
         taskHistory.setTimestamp(date);
-        ;
         taskHistory.setUser(task.getOwner());
+        updateUserStoryPoints(task.getOwner());
         taskHistoryRepository.save(taskHistory);
     }
 
@@ -50,21 +53,24 @@ public class TaskServiceImpl implements TaskService {
         task.setName(updatedTask.getName());
         task.setDescription(updatedTask.getDescription());
         task.setDate(updatedTask.getDate());
+        task.setStoryPoints(updatedTask.getStoryPoints());
         taskRepository.save(task);
         LocalDateTime date = LocalDateTime.now();
         TaskHistory taskHistory = new TaskHistory();
         taskHistory.setTask(task);
-        taskHistory.setAction("Not Assigned");
+        taskHistory.setAction(task.getOwner() != null ? "Assigned" : "Not Assigned");
         taskHistory.setTimestamp(date);
-        ;
         taskHistory.setUser(task.getOwner());
         taskHistoryRepository.save(taskHistory);
+        updateUserStoryPoints(task.getOwner());
     }
 
     @Override
     public void deleteTask(Long id) {
-        taskHistoryRepository.deleteAllByTask(taskRepository.getById(id));
+        Task task = taskRepository.getById(id);
+        taskHistoryRepository.deleteAllByTask(task);
         taskRepository.deleteById(id);
+        updateUserStoryPoints(task.getOwner());
     }
 
     @Override
@@ -97,7 +103,6 @@ public class TaskServiceImpl implements TaskService {
                 .stream()
                 .filter(task -> task.getOwner() == null && !task.isCompleted())
                 .collect(Collectors.toList());
-
     }
 
     @Override
@@ -107,6 +112,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void assignTaskToUser(Task task, User user) {
+        userService.saveUser(user);
+        User prevUser = task.getOwner();
+        if (prevUser != null) {
+            updateUserStoryPoints(prevUser);
+        }
         task.setOwner(user);
         task.setAction("Assigned");
         taskRepository.save(task);
@@ -115,13 +125,13 @@ public class TaskServiceImpl implements TaskService {
         taskHistory.setTask(task);
         taskHistory.setAction("Assigned");
         taskHistory.setTimestamp(date);
-        ;
         taskHistory.setUser(task.getOwner());
         taskHistoryRepository.save(taskHistory);
+        updateUserStoryPoints(user);
     }
 
     @Override
-    public void unassignTask(Task task) {
+    public void unassignTask(Task task, User user) {
         task.setOwner(null);
         task.setAction("Unassigned");
         task.setTeam(null);
@@ -132,8 +142,8 @@ public class TaskServiceImpl implements TaskService {
         taskHistory.setAction("Unassigned From");
         taskHistory.setTimestamp(date);
         taskHistory.setUser(task.getOwner());
-
         taskHistoryRepository.save(taskHistory);
+        updateUserStoryPoints(user);
     }
 
     public long countTasks() {
@@ -148,5 +158,17 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteAllTaskFromProject(Project project) {
         taskRepository.deleteAllByProject(project);
+    }
+
+    private void updateUserStoryPoints(User user) {
+        if (user != null) {
+            int storyPoints = calculateStoryPoints(user.getTasksOwned());
+            user.setAllocatedStoryPoints(storyPoints);
+            userService.saveUser(user);
+        }
+    }
+
+    private int calculateStoryPoints(List<Task> tasks) {
+        return tasks.stream().mapToInt(Task::getStoryPoints).sum();
     }
 }

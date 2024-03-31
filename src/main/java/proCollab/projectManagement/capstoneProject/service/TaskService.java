@@ -28,7 +28,7 @@ public interface TaskService {
 
     void assignTaskToUser(Task task, User user);
 
-    void unassignTask(Task task);
+    void unassignTask(Task task, User user);
 
     long countTasks();
 
