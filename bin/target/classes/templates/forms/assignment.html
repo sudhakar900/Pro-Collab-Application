@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.thymeleaf.org">
+<head>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <title>Assign Tasks</title>
+    <link rel="stylesheet" th:href="@{/css/assignment.css}">
+</head>
+
+<body>
+
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
+    <h1>Assign Tasks</h1>
+</header>
+
+<main class="container">
+    <div class="card" id="cardView" style="display: none;">
+        <div class="card-header">
+            <h2>Assign tasks to users</h2>
+            <button class="toggle-button" onclick="switchLayout()">Switch to Table View</button>
+        </div>
+        <div class="card-body">
+            <h3>Choose a user</h3>
+            <input type="text" id="searchInput" class="searchInput" onkeyup="filterUsers()" placeholder="Search for a user...">
+            <div class="card-deck">
+                <div th:each="user: ${users}" class="user">
+                    <a th:href="'/assignment/' + ${user.id}" class="text-decoration-none text-dark">
+                        <div class="card">
+                            <img class="card-img" th:src="${user.photo}" alt="User photo">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${user.name}"></h5>
+                                <p class="card-text">
+                                    <small>Tasks in progress:</small>
+                                    <span th:text="${user.getTasksInProgress().size()}">0</span>
+                                    <br>
+                                    <small>Allocated Story Points:</small>
+                                    <span th:text="${user.getAllocatedStoryPoints()}">0</span>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" id="tableView">
+        <div class="card-header">
+            <h2>Assign tasks to users</h2>
+            <button class="toggle-button" onclick="switchLayout()">Switch to Card View</button>
+        </div>
+        <div class="card-body">
+            <h3>Choose a user</h3>
+            <input type="text" id="searchInputTable" class="searchInput" onkeyup="filterTableUsers()" placeholder="Search for a user...">
+            <table id="usersTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Tasks in Progress</th>
+                        <th>Allocated Story Points</th> <!-- New column for allocated story points -->
+                        <th>Assigned Tasks</th> <!-- Renamed column -->
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <!-- Populate the table with user data dynamically -->
+                    <tr class="tableUser" th:each="user: ${users}">
+                        <td class="table-title" th:text="${user.name}"></td>
+                        <td th:text="${user.getTasksInProgress().size()}">0</td>
+                        <td th:text="${user.allocatedStoryPoints}"></td>
+                        <td><a th:href="'/assignment/' + ${user.id}" class="assign-button">Assign</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<!--remain scroll position after redirect-->
+<script src="js/main.js"></script>
+<script src="js/loading.js"></script>
+<script src="js/assignment.js"></script>
+
+</body>
+</html>

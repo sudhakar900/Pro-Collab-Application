@@ -78,10 +78,13 @@ public class ProjectController {
         List<Task> task = project.getTasks();
         for (Task t : task) {
             t.setTeam(null);
+            t.setProject(null);
             taskService.updateTask(t.getId(), t);
             taskHistoryService.deleteAllTaskHistoryByTask(t);
+            taskService.deleteTask(t.getId());
         }
-        taskService.deleteAllTaskFromProject(project);
+
+        // taskService.deleteAllTaskFromProject(project);
         teamRepository.deleteAllByProject(project);
         projectService.deleteProject(projectId);
         return ResponseEntity.noContent().build();

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org">
+<head>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" th:href="@{/css/calendar.css}"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <!-- FullCalendar JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+        <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var calendarEl = document.getElementById("calendar");
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: "dayGridMonth",
+                headerToolbar: {
+                    left: "prev,next today",
+                    center: "title",
+                    right: "dayGridMonth,timeGridWeek,timeGridDay",
+                },
+                editable: true,
+                selectable: true,
+                eventClick: function (info) {
+                    // Display modal with task details
+                    $('#taskModal').modal('show');
+                    // Populate modal with task details
+                    $('#taskTitle').text(info.event.title);
+                    $('#taskDate').text(info.event.startStr);
+                    $('#taskDescription').text(info.event.extendedProps.description);
+                    $('#taskCreator').text(info.event.extendedProps.creatorName);
+                    $('#taskCompleted').text(info.event.extendedProps.completed ? 'Yes' : 'No');
+                },
+                eventMouseEnter: function (info) {
+                    console.log("Mouse entered event:", info.event);
+                    info.el.classList.add("hover");
+                },
+                eventMouseLeave: function (info) {
+                    console.log("Mouse left event:", info.event);
+                    info.el.classList.remove("hover");
+                },
+                eventContent: function(arg) {
+                    return {
+                        html: '<div class="fc-content">' +
+                              '<span class="fc-title">' + arg.event.title + '</span>' +
+                              '</div>'
+                    };
+                },
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    $.ajax({
+                        url: '/calendartasks', // Endpoint to fetch events
+                        method: 'GET',
+                        success: function (response) {
+                            var events = response.map(function (task) {
+                                return {
+                                    title: task.name,
+                                    start: task.date,
+                                    description: task.description,
+                                    creatorName: task.creatorName,
+                                    completed: task.completed
+                                };
+                            });
+                            successCallback(events);
+                        },
+                        error: function (xhr, status, errorThrown) {
+                            console.error('Error fetching events:', errorThrown);
+                            failureCallback(errorThrown);
+                        }
+                    });
+                },
+                contentHeight: "auto", 
+            });
+            calendar.render();
+            calendarEl.style.marginTop = "50px";
+        });
+    </script>
+</head>
+<body>
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('calendar')"></th:block> /*/-->
+</header>
+<div id="calendar" class="calendar"></div>
+
+<!-- Modal -->
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="taskModalLabel">Task Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Title: </strong><span id="taskTitle"></span></p>
+                <p><strong>Date: </strong><span id="taskDate"></span></p>
+                <p><strong>Description: </strong><span id="taskDescription"></span></p>
+                <p><strong>Creator: </strong><span id="taskCreator"></span></p>
+                <p><strong>Completed: </strong><span id="taskCompleted"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

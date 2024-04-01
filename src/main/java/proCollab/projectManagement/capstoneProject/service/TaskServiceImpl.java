@@ -2,6 +2,7 @@ package proCollab.projectManagement.capstoneProject.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import proCollab.projectManagement.capstoneProject.model.Project;
 import proCollab.projectManagement.capstoneProject.model.Task;
@@ -156,6 +157,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void deleteAllTaskFromProject(Project project) {
         taskRepository.deleteAllByProject(project);
     }

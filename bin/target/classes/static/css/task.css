@@ -1,0 +1,121 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    /* color: #5684ee; */
+    /* background: linear-gradient(0deg, rgba(176, 195, 234, .2) 0%, #ffffff 100%); */
+    /* background-color: blue; */
+  }
+  
+  span {
+    color: #5684ee;
+    font-weight: 600;
+    font-size: .8rem;
+  }
+  
+  input {
+    border: 1px solid rgba(86, 132, 238, .3);
+    padding: 9px;
+    color: #5684ee;
+    border-radius: 3px;
+    transition: border .3s linear;
+    display: block;
+    width: 10%;
+  }
+  
+  input:focus {
+    border-color: rgba(86, 132, 238, .7);
+  }
+
+  .button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  h1 {
+    font-size: 1rem;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+  }
+  .task-title{
+    background: rgb(86, 80, 80);
+  
+  }
+  .title-container{
+    border-top-left-radius: 5%;
+    border-top-right-radius: 5%;
+
+  }
+  .card{
+    background-color: white;
+    box-shadow: 1px 1px 25px rgba(86, 132, 238, .3);
+    /* border-radius: 5%; */
+  }
+
+.container {
+  margin: auto;
+  max-width: 800px;
+  padding: 20px;
+}
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.card-header {
+  background-color: #2a429a;
+  border-bottom: 1px solid #ccc;
+  font-size: 24px;
+  padding: 10px;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-control-label {
+  font-weight: bold;
+}
+
+.input-group-prepend .input-group-text {
+  background-color: #f0f0f0;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  width:100px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+  .container {
+      padding: 10px;
+  }
+}

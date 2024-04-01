@@ -1,0 +1,172 @@
+.calendar{
+    margin-top: 150px;
+}
+.hover {
+    background-color: #11813c;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.fc-daygrid-event-harness{
+    /* width: 200%; */
+    height: 40px;
+    
+}
+.fc-content{
+    /* width: 200%; */
+    height: 40px;
+    display: flexbox;
+    align-items: center;
+    justify-content: center;
+}
+.fc-title{
+    display: flexbox;
+    align-items: center;
+    justify-content: center;
+}
+/* Custom styles for the calendar */
+
+/* Add padding to calendar container */
+#calendar {
+    padding: 10px;
+    margin-top: 0%;
+}
+
+/* Style header toolbar */
+.fc-header-toolbar {
+    background-color: #007bff; /* Set background color */
+    color: #fff; /* Set text color */
+    padding: 10px; /* Add padding */
+    border-radius: 5px; /* Add border radius */
+    margin-bottom: 20px; /* Add margin bottom */
+}
+
+/* Style navigation buttons */
+.fc-header-toolbar button {
+    background-color: transparent;
+    border: none;
+    color: #fff; /* Set button color */
+    cursor: pointer;
+}
+
+/* Style center title */
+.fc-header-toolbar h2 {
+    margin: 0;
+    font-size: 20px; /* Increase font size */
+}
+
+/* calendar.css */
+
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.calendar {
+    margin: 50px auto;
+}
+
+/* Modal styles */
+.modal-title {
+    font-weight: bold;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+}
+
+/* Event hover effect */
+.hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+/* calendar.css */
+
+/* Global styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+.header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.calendar {
+    margin: 50px auto;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Modal styles */
+.modal-title {
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+/* Event hover effect */
+.hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+/* FullCalendar styling */
+.fc-daygrid-event {
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.fc-daygrid-event:hover {
+    background-color: #0056b3;
+}
+
+.fc-daygrid-event-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fc-daygrid-event-dot {
+    display: none;
+}
+
+.fc-daygrid-event:hover .fc-daygrid-event-dot {
+    display: block;
+}
+
+.fc-daygrid-event-dot::before {
+    content: "•";
+    color: #fff;
+    font-size: 8px;
+    margin-right: 4px;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" th:href="@{/css/ChatMessages.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script th:src="@{/js/ChatMessages.js}"></script>
+        <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+<body>
+    <header>
+        <!--/*/ <th:block th:include="fragments/header :: header('chat')"></th:block> /*/-->
+    </header>
+    <div class="sidebar">
+        <h2>Employees</h2>
+        <ul id="employeeList">
+            <li th:if="${user.id!=signedIn.id}"  th:each="user : ${Users}">
+                <a  th:onclick="'fetchChatHistory(' + ${user.id} + ', ' + ${signedIn.id} + ',)'" th:text="${user.name}"></a>
+            </li>
+        </ul>
+    </div>
+    <div class="chat-container">
+        
+        <div id="chatHistory" class="chatHistory">
+            <!-- Chat history will be displayed here -->
+            <h1 class="selected">No Selected User</h1>
+        </div>
+        <div class="message-input"> <!-- Apply premium styling from input-field.css -->
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button class="sendButton" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        
+    </div>
+
+    
+</body>
+</html>

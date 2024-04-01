@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Tasks</title>
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/projectTasks.css}">
+</head>
+<body>
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
+</header>
+<div class="container">
+    <div class="task-list">
+        <h1>Tasks of Project</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Assigned To</th>
+                <th>Details</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${project.tasks}">
+                <td th:text="${task.name}"></td>
+                <td th:text="${task.description}"></td>
+                <td th:text="${task.date}"></td>
+                <td th:text="${task.owner != null ? task.owner.name : 'Unassigned'}"></td>
+                <td><a th:href="@{/projects/projectTasks/{projectId}/taskDetails/{taskId}(projectId=${project.id},taskId=${task.id})}">Details</a></td>
+                <td th:text="${task.isCompleted ? 'Completed' : 'Not Completed'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

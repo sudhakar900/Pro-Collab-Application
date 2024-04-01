@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Project</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/createProject.css}">
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+</head>
+<body>
+<header>
+    <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
+</header>
+<div class="container">
+    <h1>Create New Project</h1>
+
+    <!-- Form for adding a new project -->
+    <form id="projectForm">
+        <label for="name">Project Name:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="description">Project Description:</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+        
+        <div class="date">
+            <div class="dates" id="start">
+                <label for="startDate">Start Date:</label>
+                <!-- Set min attribute to restrict previous dates -->
+                <input type="date" id="startDate" name="startDate" required th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" onchange="updateDueDateMin()">
+            </div>
+            <div class="dates" id="end">
+                <label for="dueDate">Due Date:</label>
+                <input type="date" id="dueDate" name="dueDate" required>
+            </div>
+        </div>
+
+        <button type="button" onclick="addProject()">Add Project</button>
+    </form>
+    
+</div>
+
+<script>
+    function updateDueDateMin() {
+    var startDateInput = document.getElementById('startDate');
+    var dueDateInput = document.getElementById('dueDate');
+    
+    // Get the current date
+    var currentDate = new Date();
+    var currentDateString = currentDate.toISOString().split('T')[0]; // Convert to ISO format
+    
+    // Set the minimum value of the start date input to be the current date
+    startDateInput.min = currentDateString;
+    
+    // Get the selected start date
+    var startDate = new Date(startDateInput.value);
+    
+    // Set the minimum value of the due date input to be the next day after the start date
+    startDate.setDate(startDate.getDate() + 1); // Increment by 1 day
+    var minDate = startDate.toISOString().split('T')[0]; // Convert to ISO format
+    
+    dueDateInput.min = minDate;
+    
+    // Reset the due date if it's before the new minimum value
+    if (dueDateInput.value < minDate) {
+        dueDateInput.value = minDate;
+    }
+}
+
+    
+    function addProject() {
+        var form = document.getElementById('projectForm');
+        var formData = new FormData(form);
+        var jsonObject = {};
+
+        // Convert FormData to JSON object
+        formData.forEach(function (value, key) {
+            jsonObject[key] = value;
+        });
+
+        // Make a POST request with JSON payload
+        fetch('/projects/createProject', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonObject)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Redirect to project list page
+            window.location.href = "/projects/projectList";
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            // Show error message
+        });
+    }
+</script>
+</body>
+</html>
