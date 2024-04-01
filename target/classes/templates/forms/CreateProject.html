@@ -24,7 +24,8 @@
         <div class="date">
             <div class="dates" id="start">
                 <label for="startDate">Start Date:</label>
-                <input type="date" id="startDate" name="startDate" required onchange="updateDueDateMin()">
+                <!-- Set min attribute to restrict previous dates -->
+                <input type="date" id="startDate" name="startDate" required th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" onchange="updateDueDateMin()">
             </div>
             <div class="dates" id="end">
                 <label for="dueDate">Due Date:</label>
@@ -39,23 +40,32 @@
 
 <script>
     function updateDueDateMin() {
-        var startDateInput = document.getElementById('startDate');
-        var dueDateInput = document.getElementById('dueDate');
-        
-        // Get the selected start date
-        var startDate = new Date(startDateInput.value);
-        
-        // Set the minimum value of the due date input to be the next day after the start date
-        startDate.setDate(startDate.getDate() + 1); // Increment by 1 day
-        var minDate = startDate.toISOString().split('T')[0]; // Convert to ISO format
-        
-        dueDateInput.min = minDate;
-        
-        // Reset the due date if it's before the new minimum value
-        if (dueDateInput.value < minDate) {
-            dueDateInput.value = minDate;
-        }
+    var startDateInput = document.getElementById('startDate');
+    var dueDateInput = document.getElementById('dueDate');
+    
+    // Get the current date
+    var currentDate = new Date();
+    var currentDateString = currentDate.toISOString().split('T')[0]; // Convert to ISO format
+    
+    // Set the minimum value of the start date input to be the current date
+    startDateInput.min = currentDateString;
+    
+    // Get the selected start date
+    var startDate = new Date(startDateInput.value);
+    
+    // Set the minimum value of the due date input to be the next day after the start date
+    startDate.setDate(startDate.getDate() + 1); // Increment by 1 day
+    var minDate = startDate.toISOString().split('T')[0]; // Convert to ISO format
+    
+    dueDateInput.min = minDate;
+    
+    // Reset the due date if it's before the new minimum value
+    if (dueDateInput.value < minDate) {
+        dueDateInput.value = minDate;
     }
+}
+
+    
     function addProject() {
         var form = document.getElementById('projectForm');
         var formData = new FormData(form);

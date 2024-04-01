@@ -27,13 +27,7 @@ public class BulkUploadServiceImpl implements BulkUploadService {
     private UserRepository userRepository;
 
     @Autowired
-    private CompanyRepository companyRepository;
-
-    @Autowired
     private EmailService emailService;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private RoleRepository roleRepository;
