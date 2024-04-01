@@ -12,7 +12,7 @@
     <header class="header">
         <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
     </header>
-    <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:action="@{'/project/' + ${project.id} + '/createTeam'}" method="post" class="form">
+    <form style="width: 700px;" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:action="@{'/project/' + ${project.id} + '/createTeam'}" method="post" class="form">
         <h1>Create Team</h1>
         <label for="name">Team Name:</label>
         <input type="text" name="name" required>
@@ -21,7 +21,7 @@
         
         <button type="submit">Create Team</button>
     </form>
-    <div class="container">
+    <div class="container" style="width: 700px;">
         <h1 class="heading">Available Teams</h1>
         <div class="table-container">
             <table class="team-table">

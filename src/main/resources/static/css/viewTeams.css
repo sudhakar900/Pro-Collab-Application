@@ -13,7 +13,7 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 500px;
     margin: 20px auto;
     padding: 20px;
     background-color: #fff;
@@ -256,7 +256,7 @@ button[type="submit"]:hover {
 
 /* Styling for the container */
 .container {
-    max-width: 1200px;
+    max-width: 500px;
     margin: 20px auto;
     padding: 20px;
     background-color: #fffdfd;

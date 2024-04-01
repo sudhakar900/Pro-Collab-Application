@@ -78,7 +78,7 @@ public class EmailService {
     }
 
     public void sendInviteMail(String email, Long employeeId, String password) {
-        String emailSubject = "Welocome to ProCollab";
+        String emailSubject = "Welcome to ProCollab";
         String emailContent = "<html><body>" +
                 "<h2>Welcome to ProCollab!</h2>" +
                 "<p>Dear User,</p>" +
