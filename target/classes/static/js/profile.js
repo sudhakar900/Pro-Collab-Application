@@ -246,9 +246,18 @@ const unsignedUploadPreset = "wmm3vnwb"; // Replace with your Cloudinary unsigne
 
 function uploadImage() {
   const fileInput = document.getElementById("fileInput");
+  const previewImage = document.getElementById('previewImage');
+  const preview=document.getElementById('preview');
   const file = fileInput.files[0];
   if (!file) return;
-
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        previewImage.src = event.target.result;
+        preview.style.display='block';
+    };
+    reader.readAsDataURL(file);
+}
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", unsignedUploadPreset);

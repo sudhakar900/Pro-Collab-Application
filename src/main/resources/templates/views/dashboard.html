@@ -18,7 +18,7 @@
         <!--/*/ <th:block th:include="fragments/header :: header('calendar')"></th:block> /*/-->
     </header>
   
-    <div class="container" id="main-Container">
+    <div class="container" id="main-Container" style="box-shadow: 0 0 ">
         <h1>Dashboard</h1>
         <div class="kanban-board">
             <div class="column">
@@ -70,7 +70,7 @@
         </div>
     </div>
     
-    <div class="container" id="line-Chart"  >
+    <div class="container" id="line-Chart" th:style="${#authorization.expression('hasRole(''ROLE_USER'')')} ? 'width: 900px;' : 'box-shadow: 0 0;'">
         <div class="kanban-board" id="taskColumn" sec:authorize="!hasRole('ROLE_USER')">
             <div class="column" >
                 <div class="column-header">Employees In Every Project</div>
@@ -80,11 +80,11 @@
             </div>
 
         </div>
-        <div class="kanban-board">
-            <div class="column">
+        <div class="kanban-board" th:style="${#authorization.expression('hasRole(''ROLE_USER'')')} ? 'height: 500px; width: 900px; display: flex; justify-content: center;' : ''" >
+            <div class="column" >
                 <div class="column-header">Tasks In Every Project</div>
-                <div class="chart-container" id="line-chart">
-                    <canvas id="lineChartTasks"></canvas>
+                <div class="chart-container" id="line-chart" >
+                    <canvas id="lineChartTasks" th:style="${#authorization.expression('hasRole(''ROLE_USER'')')} ? 'height: 100px;' : ''"></canvas>
                 </div>
             </div>
 
