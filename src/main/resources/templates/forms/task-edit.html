@@ -49,10 +49,22 @@
 
                     </div>
                 </div>
-
+                <div class="form-group">
+                    <label for="storyPoints" class="form-control-label">Story Points</label>
+                    <select class="form-control" th:field="*{storyPoints}" id="storyPoints">
+                        <option value="1" th:selected="${task.storyPoints == 0 || task.storyPoints == 1}">1 - Very Easy</option>
+                        <option value="2" th:selected="${task.storyPoints == 2}">2 - Easy</option>
+                        <option value="3" th:selected="${task.storyPoints == 3}">3 - Moderate</option>
+                        <option value="5" th:selected="${task.storyPoints == 5}">5 - Difficult</option>
+                        <option value="8" th:selected="${task.storyPoints == 8}">8 - Very Difficult</option>
+                        <option value="13" th:selected="${task.storyPoints == 13}">13 - Extremely Difficult</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                </div>
+                
                 <!--date-->
                 <div class="form-group">
-                    <label for="date" class="form-control-label">Date</label>
+                    <label for="date" class="form-control-label">Due Date</label>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>

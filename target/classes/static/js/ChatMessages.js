@@ -49,6 +49,7 @@ function handleIncomingMessage(message) {
 }
 
 // Function to send a message
+// Function to send a message
 function sendMessage() {
   const messageContent = document.getElementById("messageInput").value;
   var istOffsetInMilliseconds = 5.5 * 60 * 60 * 1000;
@@ -70,7 +71,13 @@ function sendMessage() {
     {},
     JSON.stringify(chatMessage),
     function () {
-      // Message sent successfully, show it in the chat history
+      // Message sent successfully, hide "No messages Found" message
+      const noMessagesFound = document.getElementById("selected");
+      if (noMessagesFound) {
+        noMessagesFound.style.display = "none";
+      }
+
+      // Show the message in the chat history
       showMessage(chatMessage);
 
       // Clear the message input field after sending
@@ -78,6 +85,8 @@ function sendMessage() {
     }
   );
 }
+
+// Function to fetch chat history for a specific user
 // Function to fetch chat history for a specific user
 // Function to fetch chat history for a specific user
 function fetchChatHistory(userId, loggedId, sName, rName) {
@@ -94,31 +103,38 @@ function fetchChatHistory(userId, loggedId, sName, rName) {
       const recipientMessages = data.Recipient;
       const chatHistoryElement = document.getElementById("chatHistory");
       chatHistoryElement.innerHTML = ""; // Clear existing chat history
+
+      // Check if there are any messages
       if (senderMessages.length == 0 && recipientMessages.length == 0) {
-        const empty = document.createElement("div");
-        empty.innerHTML = "<h1 class='selected'>No messages Found</h1>";
-        chatHistoryElement.appendChild(empty);
+        const noMessagesFound = document.querySelector(".selected");
+        if (noMessagesFound) {
+          noMessagesFound.style.display = "none"; // Hide the "No messages Found" message
+        }
+      } else {
+        // Combine sender and recipient messages
+        const allMessages = senderMessages.concat(recipientMessages);
+
+        // Sort messages by timestamp
+        allMessages.sort(
+          (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
+        );
+
+        // Append sorted messages
+        allMessages.forEach((message) => {
+          const senderName = message.sender;
+          const messageContent = message.content;
+          const formattedTimestamp = new Date(
+            message.timestamp
+          ).toLocaleString(); // Format timestamp
+
+          // Create message element
+          const messageElement = document.createElement("div");
+          messageElement.classList.add("chat-message"); // Add the chat message class
+          messageElement.innerHTML = `<strong>${senderName} (${formattedTimestamp}):</strong> ${messageContent}`;
+          chatHistoryElement.appendChild(messageElement);
+          console.log(message.timestamp, formattedTimestamp);
+        });
       }
-
-      // Combine sender and recipient messages
-      const allMessages = senderMessages.concat(recipientMessages);
-
-      // Sort messages by timestamp
-      allMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-
-      // Append sorted messages
-      allMessages.forEach((message) => {
-        const senderName = message.sender;
-        const messageContent = message.content;
-        const formattedTimestamp = new Date(message.timestamp).toLocaleString(); // Format timestamp
-
-        // Create message element
-        const messageElement = document.createElement("div");
-        messageElement.classList.add("chat-message"); // Add the chat message class
-        messageElement.innerHTML = `<strong>${senderName} (${formattedTimestamp}):</strong> ${messageContent}`;
-        chatHistoryElement.appendChild(messageElement);
-        console.log(message.timestamp, formattedTimestamp);
-      });
     })
     .catch((error) => {
       console.error("Error fetching chat history:", error);

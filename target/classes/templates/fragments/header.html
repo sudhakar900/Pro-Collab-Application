@@ -28,7 +28,7 @@
                       Create
                   </a>
                   <div class="dropdown-menu" aria-labelledby="createDropdown">
-                      <a class="dropdown-item" href="/task/create"  sec:authorize="!hasRole('ROLE_PROADMIN')" >Task</a>
+                      <a class="dropdown-item" href="/task/create"  sec:authorize="hasRole('ROLE_ADMIN')" >Task</a>
                       <a class="dropdown-item" href="/notes/create"  sec:authorize="!hasRole('ROLE_PROADMIN')">Notes</a>
                       <a class="dropdown-item" href="/projects/createProject"  sec:authorize="hasRole('ROLE_ADMIN')">Project</a>
                   </div>
@@ -45,7 +45,7 @@
                       <a class="dropdown-item" href="/tasks" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN')">Tasks List</a>
                       <a class="dropdown-item" href="/users" sec:authorize="hasRole('ROLE_ADMIN')">Employees List</a>
                       <a class="dropdown-item" href="/calendar" sec:authorize="!hasRole('ROLE_PROADMIN')">Calendar</a>
-                      <a class="dropdown-item" href="/projects/projectList" sec:authorize="!hasRole('ROLE_PROADMIN')">Project List</a>
+                      <a class="dropdown-item" href="/projects/projectList" sec:authorize="hasRole('ROLE_ADMIN')">Project List</a>
                       <a class="dropdown-item" href="/notes" sec:authorize="!hasRole('ROLE_PROADMIN')">Notes List</a>
                       <a class="dropdown-item" href="/projects/yourProjects" sec:authorize="!hasRole('ROLE_SUPERADMIN') and !hasRole('ROLE_PROADMIN')" >Your Projects</a>
                       <a class="dropdown-item" href="/tasks/yourTasks" sec:authorize="!hasRole('ROLE_SUPERADMIN') and !hasRole('ROLE_PROADMIN')" >Your Tasks</a>
@@ -60,7 +60,7 @@
                 <a class="nav-link" href="/company/addCompany"  sec:authorize="hasRole('ROLE_PROADMIN')">ADD Company</a>
             </li>
             <li th:class="${activeTab == 'company'}? 'active nav-item mr-4' : 'nav-item mr-4'" sec:authorize="isAuthenticated()">
-                <a class="nav-link" href="/superAdmin/addUsers/ExcelFile"  sec:authorize="hasRole('ROLE_SUPERADMIN')"  style="margin-left:-40px;margin-right: 30px;">ADD Users</a>
+                <a class="nav-link" href="/upload/fromExcel"  sec:authorize="hasRole('ROLE_SUPERADMIN')"  style="margin-left:-40px;margin-right: 30px;">ADD Users</a>
             </li>
             <li th:class="${activeTab == 'company-list'}? 'active nav-item mr-4' : 'nav-item mr-4'" sec:authorize="isAuthenticated()">
                 <a class="nav-link" href="/company/showCompanies"  sec:authorize="hasRole('ROLE_PROADMIN')" style="margin-right: 70px;">Company List</a>
@@ -72,9 +72,9 @@
               <li th:class="${activeTab == 'chat'}? 'active nav-item mr-4' : 'nav-item mr-4'">
                 <a class="nav-link" href="/chat/messages">Chat</a>
             </li>
-            <li th:class="${activeTab == 'video'}? 'active nav-item mr-4' : 'nav-item mr-4'">
+            <!-- <li th:class="${activeTab == 'video'}? 'active nav-item mr-4' : 'nav-item mr-4'">
                 <a class="nav-link" href="/video/call">Video Call</a>
-            </li>
+            </li> -->
           </ul>
 
           <ul class="navbar-nav profile-nav">

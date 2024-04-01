@@ -5,99 +5,209 @@
     <title>Project Employees</title>
     <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
     <link rel="stylesheet" type="text/css" th:href="@{/css/projectEmployees.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/teamEmployees.css}">
 </head>
 <body>
 <header>
     <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
 </header>
-<div class="container">
-    <div class="employee-list">
+<div class="container" id="container">
+    <div class="employee-list" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
         <h1>Employee List For Teams</h1>
         
         <!-- Conditionally show the "Add Employee" section for admin users -->
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
             <div class="add-employee-section">
                 <h2>Add Employee to Project</h2>
+                <!-- Search bar for adding employees -->
+                <input type="text" id="addEmployeeSearch" placeholder="Search..." onkeyup="filterAddEmployees()">
                 <form id="addEmployeeForm" class="employee-form">
-                    <select name="userId" id="userId">
-                        <!-- Populate with available users -->
-                        <option th:each="user : ${availableUsers}" th:value="${user.id}" th:text="${user.name}"></option>
-                    </select>
-                    <button class="btn" type="button" th:onclick="'addEmployeeToProject(' + ${projectId} + ',' + ${teamId} + ')'">Add Employee</button>
+                    <table class="add-employee-table" id="addEmployeeTable">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populate with available users -->
+                            <tr th:each="user : ${availableUsers}" class="add-employee-row">
+                                <td><input type="checkbox" name="userId" th:value="${user.id}" th:id="'user_' + ${user.id}" class="employee-checkbox"></td>
+                                <td th:text="${user.name}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn" type="button" th:onclick="'addEmployeesToTeam(' + ${projectId} + ',' + ${teamId} + ')'">Add Employees</button>
                 </form>
             </div>
         </div>
     </div>
+   <div class="smallContainer">
+    <h5>Employees in Team</h5>
+    <!-- Search bar for deleting employees -->
+    <input type="text" id="deleteEmployeeSearch" placeholder="Search..." onkeyup="filterDeleteEmployees()">
     <table>
         <thead>
-            <tr >
+            <tr>
                 <th>Name</th>
-                <th th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"  style="text-align: center;">Assign Tasks</th>
-                <th th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"  style="text-align: center;">Delete From Team</th>
-
+                <th th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" style="text-align: center;">Assign Tasks</th>
+                <th th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" style="text-align: center;">
+                    <!-- Checkbox to select all employees -->
+                    <span>Delete Users</span>
+                    <input type="checkbox" id="selectAllCheckbox" onchange="toggleAllCheckboxes()">
+                </th>
             </tr>
         </thead>
-        <tbody>
-            <tr th:each="user : ${teamUsers}">
+        <tbody id="deleteEmployeeTable">
+            <tr th:each="user : ${teamUsers}" class="delete-employee-row">
                 <td th:text="${user.name}"></td>
-                <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"  style="text-align: center;"> 
+                <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" style="text-align: center;">
                     <a class="assign-btn" th:href="@{'/assignment/project/' + ${projectId} + '/team/' + ${teamId} + '/user/' + ${user.id}}">Assign</a>
                 </td>
                 <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" style="text-align: center;">
-                    <a class="delete-btn btn" th:href="@{'/project/assignment/delete/project/' + ${projectId} + '/team/' + ${teamId} + '/user/' + ${user.id}}">Delete</a>
+                    <!-- Checkbox to select individual employees -->
+                    <input type="checkbox" name="deleteUser" th:value="${user.id}" class="delete-user-checkbox">
                 </td>
-                
             </tr>
         </tbody>
+        
     </table>
-    
+    <!-- Button to delete selected users -->
+    <button class="delete-btn btn" type="button" th:onclick="'deleteSelectedUsers(' + ${projectId} + ',' + ${teamId} + ')'" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">Delete Selected</button>
+   </div>
+</div>
 
-    
-   
 
-<!-- JavaScript function to handle adding employee to project -->
+<!-- JavaScript function to handle adding employees to team -->
 <script th:inline="javascript">
-
-    function addEmployeeToProject(projectId,teamId) {
-        console.log(projectId,teamId)
+    function addEmployeesToTeam(projectId, teamId) {
         var form = document.getElementById('addEmployeeForm');
-        var userId = form.userId.value;
-
-        fetch('/project/' + projectId + '/teams/' + teamId +'/addUsers/'+userId,{
-            method: 'POST'
+        var checkboxes = form.getElementsByClassName('employee-checkbox');
+        var selectedUsers = [];
+        
+        // Iterate over checkboxes to find selected users
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedUsers.push(checkboxes[i].value);
+            }
+        }
+        
+        // If no users are selected, return
+        if (selectedUsers.length === 0) {
+            alert('Please select at least one employee.');
+            return;
+        }
+        
+        // Perform addition of selected employees to the team
+        fetch('/project/' + projectId + '/teams/' + teamId + '/addUsers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedUsers)
         })
         .then(response => {
             if (response.ok) {
                 location.reload(); // Reload the page after successful addition
             } else {
-                alert('Failed to add employee to project.');
+                alert('Failed to add employees to team.');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Failed to add employee to project.');
+            alert('Failed to add employees to team.');
         });
     }
 
-    // JavaScript function to handle removing employee from project
-    function removeEmployeeFromProject(employeeId) {
-        if (confirm('Are you sure you want to remove this employee from the project?')) {
-            fetch('/projects/' + projectId + '/employees/' + employeeId, {
-                method: 'DELETE'
-            })
-            .then(response => {
-                if (response.ok) {
-                    location.reload(); // Reload the page after successful removal
-                } else {
-                    alert('Failed to remove employee from project.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to remove employee from project.');
-            });
+    // Function to toggle all checkboxes
+    function toggleAllCheckboxes() {
+        var checkboxes = document.getElementsByName('deleteUser');
+        var selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = selectAllCheckbox.checked;
         }
     }
+
+    // Function to delete selected users
+function deleteSelectedUsers(projectId, teamId) {
+    var checkboxes = document.getElementsByName('deleteUser');
+    var selectedUsers = [];
+    
+    // Iterate over checkboxes to find selected users
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            selectedUsers.push(checkboxes[i].value);
+        }
+    }
+    
+    // If no users are selected, return
+    if (selectedUsers.length === 0) {
+        alert('Please select at least one user to delete.');
+        return;
+    }
+    
+    // Perform deletion of selected users from the team
+    if (confirm('Are you sure you want to delete the selected users?')) {
+        fetch('/project/assignment/delete/project/' + projectId + '/team/' + teamId + '/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedUsers)
+        })
+        .then(response => {
+            if (response.ok) {
+                location.reload(); // Reload the page after successful deletion
+            } else {
+                alert('Failed to delete selected users.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to delete selected users.');
+        });
+    }
+}
+// Function to filter add employees
+function filterAddEmployees() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("addEmployeeSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("addEmployeeTable");
+    tr = table.getElementsByClassName("add-employee-row");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1]; // Index 1 for name column
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+// Function to filter delete employees
+function filterDeleteEmployees() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("deleteEmployeeSearch");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("deleteEmployeeTable");
+    tr = table.getElementsByClassName("delete-employee-row");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0]; // Index 0 for name column
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
 
 </script>
 </body>

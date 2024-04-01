@@ -31,7 +31,8 @@
 
                 <thead class="table-primary">
                 <tr>
-                    <th style="width:40%" class="text-left">Task name</th>
+                    <th style="width:30%" class="text-left">Task name</th>
+                    <th style="width: 10%;">Task Level</th>
                     <th style="width:12%">Date</th>
                     <th style="width:8%" class="d-none d-lg-table-cell">Days left</th>
                     <th style="width:8%">Completed</th>
@@ -119,7 +120,20 @@
                         </div>
                     </div>
                     <!--end of modal with task details-->
-
+                    <td>
+                        <p>
+                            <span th:switch="${t.storyPoints}">
+                                <span th:case="1">Very Easy</span>
+                                <span th:case="2">Easy</span>
+                                <span th:case="3">Medium</span>
+                                <span th:case="5">Hard</span>
+                                <span th:case="8">Very Hard</span>
+                                <span th:case="13">Extremely Hard</span>
+                                <!-- Add more cases as needed -->
+                                <span th:case="*">Unknown</span> <!-- Default case for any other value -->
+                            </span>
+                        </p>
+                    </td>
                     <!--Date-->
                     <td th:text="${#temporals.format(t.date, 'dd-MM-yyyy')}"
                         th:data-order="${t.date}"

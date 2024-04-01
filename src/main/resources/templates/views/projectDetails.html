@@ -17,6 +17,7 @@
         <p class="project-description" th:text="${project.description}"></p>
 
         <p class="project-manager">Project Manager: <span th:text="${project.creator.name}"></span></p>
+        <p class="due-date">Start Date: <span th:text="${project.startDate}"></span></p>
         <p class="due-date">Due Date: <span th:text="${project.dueDate}"></span></p>
         <form  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="complete-form" th:action="@{/projects/markComplete/{projectId}(projectId=${project.id})}" method="post">
             <label class="complete-label">
@@ -34,7 +35,6 @@
         <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/task/create/' + ${project.id}}" class="btn create-task-btn">Create Task</a>
         
         <a  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/projects/tasks/' + ${project.id}}" class="btn view-tasks-btn">View Project Tasks</a>
-        <a  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{'/project/createTeam/' + ${project.id}}" class="btn create-team-btn">Create Team</a>
         <a th:href="@{'/project/'+ ${project.id} +'/teams'}" class="btn view-teams-btn">View Teams</a>
 
     </div>

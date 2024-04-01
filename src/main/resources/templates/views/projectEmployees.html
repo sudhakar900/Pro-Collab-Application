@@ -5,6 +5,58 @@
     <title>Project Employees</title>
     <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
     <link rel="stylesheet" type="text/css" th:href="@{/css/projectEmployees.css}">
+    <style>
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 35%; /* Could be more or less, depending on screen size */
+        }
+        .modal-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -13,11 +65,13 @@
 <h1>Employee List of Project</h1>
 
 <div class="container" id="main-container">
-    <div class="employee-list add-employee-section">
+    <div class="employee-list add-employee-section" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN')" >
         <h2>Add Employee to Project</h2>
         <input type="text" id="searchInput" onkeyup="filterAvailableUsers()" placeholder="Search for available employees...">
+
         <form id="addEmployeeForm" class="employee-form">
             <button class="btn add-btn" type="button" onclick="addEmployeeToProject()">Add Employee</button>
+            <button class="btn add-btn" type="button" onclick="openUploadModal()">Bulk Upload</button>
             <table class="employee-table" id="availableUsersTable">
                 <thead>
                     <tr>
@@ -41,19 +95,18 @@
                         <td><span th:text="${user.email}"></span></td>
                     </tr>
                 </tbody>
-                
             </table>
         </form>
     </div>
 
     <div class="employee-list project-employees-section" style="margin-top: 15px;">
         <h2>Project Employees</h2>
-        <input type="text" id="searchInput" onkeyup="filterProjectEmployees()" placeholder="Search for project employees...">
-        <button class="btn delete-btn" type="button" onclick="removeSelectedEmployees()">Delete Selected</button>
+        <input sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN')" type="text" id="searchProjectInput" onkeyup="filterProjectEmployees()" placeholder="Search for project employees...">
+        <button sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN')" class="btn delete-btn" type="button" onclick="removeSelectedEmployees()">Delete Selected</button>
         <table class="employee-table" id="projectEmployeesTable">
             <thead>
                 <tr>
-                    <th></th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN')"></th>
                     <th>Name</th>
                     <th>Projects</th>
                     <th>Email</th>
@@ -63,7 +116,7 @@
             </thead>
             <tbody>
                 <tr th:each="employee : ${project.employees}">
-                    <td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_SUPERADMIN')">
                         <label class="checkbox-container">
                             <input type="checkbox" name="deleteEmployeeId" th:value="${employee.id}" class="custom-checkbox delete-employee-checkbox">
                             <span class="checkmark"></span>
@@ -79,8 +132,18 @@
                     </td>
                 </tr>
             </tbody>
-            
         </table>
+    </div>
+</div>
+<div id="uploadModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeUploadModal()">&times;</span>
+        <h2>Bulk Upload Users to Project</h2>
+        <form id="uploadForm" enctype="multipart/form-data" action="/projects/mapUsersToProject" method="post">
+            <input type="file" name="file" accept=".xlsx, .xls">
+            <input type="hidden" id="projectId" name="projectId" th:value="${project.id}"> 
+            <button class="modal-button" type="submit">Upload Excel File</button>
+        </form>
     </div>
 </div>
 
@@ -228,6 +291,15 @@
                 alert('Failed to delete selected employees from the project.');
             });
         }
+    }
+      // JavaScript function to open the upload modal
+      function openUploadModal() {
+        document.getElementById('uploadModal').style.display = "block";
+    }
+
+    // JavaScript function to close the upload modal
+    function closeUploadModal() {
+        document.getElementById('uploadModal').style.display = "none";
     }
 </script>
 </body>

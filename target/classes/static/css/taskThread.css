@@ -1,4 +1,4 @@
-body {
+ebody {
     font-family: Arial, sans-serif;
     background-color: #f6f6f6;
     margin: 0;
@@ -73,11 +73,90 @@ button:hover {
     position: absolute; /* Position the edit button absolutely */
     top: 10px; /* Adjust as needed */
     right: 10px; /* Adjust as needed */
-    display: inline-block;
+    display: inline;
     width: 50px; /* Adjust as needed */
     height: 50px; /* Adjust as needed */
     background-image: url('https://img.icons8.com/ios-glyphs/30/create-new.png'); /* Replace 'path/to/edit-icon.png' with the actual path to your edit icon */
     background-size: cover;
     text-indent: -9999px; /* Hide the anchor text */
     overflow: hidden;
+    background-color: white;
+}
+.delete-button-open{
+    display: inline-block;
+    position: absolute;
+    left: 87%;
+    top: 0.2%; 
+    border:0px solid white;
+}
+.complete-checkbox {
+    position: relative;
+    display: inline;
+    width: 60px;
+    height: 34px;
+    margin-top: 20px;
+}
+
+.complete-checkbox input {
+    display: none;
+}
+complete-form{
+    display: flex;
+}
+.complete{
+    display: inline;
+    position: relative;
+    top: 47px;
+    margin-left: -50px;
+    font:bolder;
+    font-weight: bold;
+}
+/* Slider design */
+.complete-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.complete-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .complete-slider {
+    background-color: #2cf321;
+}
+
+input:focus + .complete-slider {
+    box-shadow: 0 0 1px #21f336;
+}
+
+input:checked + .complete-slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.complete-slider.round {
+    border-radius: 34px;
+}
+
+.complete-slider.round:before {
+    border-radius: 50%;
 }

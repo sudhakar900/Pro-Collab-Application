@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teams</title>
+    <link rel="stylesheet" th:href="@{/css/createTeam.css}">
     <link rel="stylesheet" th:href="@{/css/viewTeams.css}">
     <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
 </head>
@@ -11,7 +12,16 @@
     <header class="header">
         <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
     </header>
-    <div class="container">
+    <form style="width: 700px;" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:action="@{'/project/' + ${project.id} + '/createTeam'}" method="post" class="form">
+        <h1>Create Team</h1>
+        <label for="name">Team Name:</label>
+        <input type="text" name="name" required>
+        
+        <!-- Add more fields as needed -->
+        
+        <button type="submit">Create Team</button>
+    </form>
+    <div class="container" style="width: 700px;">
         <h1 class="heading">Available Teams</h1>
         <div class="table-container">
             <table class="team-table">
@@ -28,6 +38,8 @@
                         <td class="team-actions">
                             <a class="button button-details" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
                                th:href="@{'/project/teams/' + ${team.project.id} + '/addUser/' + ${team.id}}">Team Details</a>
+                               <a class="button  button-details delete-btn" style="background-color: red;" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                               th:href="@{'/project/teams/' + ${team.project.id} + '/deleteTeam/' + ${team.id}}">Delete Team</a>
                             <a class="button button-members" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}"
                                th:href="@{'/project/teams/' + ${team.project.id} + '/addUser/' + ${team.id}}">View Team Members</a>
                         </td>
