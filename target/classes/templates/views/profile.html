@@ -40,7 +40,7 @@
 <!-- Sidenav -->
 <!-- Sidebar -->
 <div class="container">
-<div class="sidenav" style="height: 300px;">
+<div class="sidenav" style="height: 330px; margin-left:30px;">
   <div class="profile">
     <img id="profilePic" th:src="${photoUrl}" alt="Profile Picture" width="100" height="100" />
     <div class="info">
@@ -62,7 +62,7 @@
     <span class="close" onclick="closeModal()">&times;</span>
     <p>Select the avatar or choose from local storage</p>
     <input type="file" id="fileInput" accept="image/*">
-    <button onclick="uploadImage()">Upload</button>
+    <button class="uploadButton" onclick="uploadImage()">Upload</button>
     <!-- Hide the preview container initially -->
     <div id="preview" style="display: none; max-width: 100px; max-height: 100px; margin:5px; margin-left:40%;border: 1px solid grey;">
       <!-- Preview image will be displayed here -->
@@ -85,7 +85,7 @@
 </div>
 <!-- End Modal -->
  <!-- Main -->
- <div class="main-container">
+ <div class="main-container" style="margin-top: 10px;">
   <h2>IDENTITY</h2>
   <div class="card">
     <div class="card-body">

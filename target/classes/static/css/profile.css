@@ -358,3 +358,118 @@ td:last-child {
     }
   }
 
+/* Container styles */
+.my-container {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.heading {
+  color: #333;
+}
+
+/* Table styles */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  color: #333;
+  text-align: left;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f7f7f7;
+}
+
+.table-striped tbody tr:hover {
+  background-color: #e3e3e3;
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #ddd;
+}
+
+/* Advanced styling for completed tasks */
+.my-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.my-check {
+  font-size: 20px;
+  color: #28a745;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+.sidenav {
+  width: 250px;
+  height: 100%;
+  background-color: #fff; /* White background */
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+  overflow: hidden; /* Prevents content overflow */
+}
+
+/* Profile styles */
+.profile {
+  text-align: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee; /* Horizontal line separator */
+}
+
+.profile img {
+  border-radius: 50%;
+  margin-bottom: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+}
+
+.info {
+  margin-bottom: 20px;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333; /* Darker text color */
+  /* margin-bottom: 5px; */
+}
+
+.email {
+  font-size: 14px;
+  color: #666; /* Slightly lighter text color */
+}
+
+.buttons button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth hover transition */
+  /* margin-top: 20px; */
+}
+
+.buttons button:hover {
+  background-color: #0056b3; /* Darker color on hover */
+}
+.uploadButton{
+  width:20%;
+  margin-top:5px;
+}
