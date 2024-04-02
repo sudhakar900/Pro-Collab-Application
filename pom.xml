@@ -8,6 +8,7 @@
         <version>2.5.6</version> <!-- Updated to latest version -->
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <packaging>war</packaging>
     <groupId>pro.collab</groupId>
     <artifactId>ProCollab</artifactId>
     <version>0.0.1-SNAPSHOT</version>
