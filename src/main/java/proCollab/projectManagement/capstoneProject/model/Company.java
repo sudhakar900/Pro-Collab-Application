@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,16 +23,19 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
     private Long id;
+    
     private String name;
     private String address;
     private String city;
     private String country;
     private String phoneNumber;
     private String email;
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-    private List<User> users;
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Project> projects;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<User> users;
 
     public Company() {
     }

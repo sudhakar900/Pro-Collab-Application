@@ -14,6 +14,7 @@ import nonapi.io.github.classgraph.utils.Join;
 
 @Entity
 public class TaskThreads {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,7 +30,7 @@ public class TaskThreads {
     private String content;
 
     private LocalDateTime localDateTime;
-
+    
     public TaskThreads() {
     }
 

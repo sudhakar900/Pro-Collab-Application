@@ -10,12 +10,16 @@ public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    
+    @ManyToOne(fetch = FetchType.EAGER) // Change to EAGER fetching
     private User sender;
-    @ManyToOne
+    
+    @ManyToOne(fetch = FetchType.EAGER) // Change to EAGER fetching
     private User recipient;
+    
     @Column(columnDefinition = "TEXT")
     private String content;
+    
     private LocalDateTime timestamp;
 
     public ChatMessage() {

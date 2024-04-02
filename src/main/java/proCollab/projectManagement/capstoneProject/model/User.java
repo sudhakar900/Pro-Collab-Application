@@ -35,36 +35,39 @@ public class User {
     private long employeeId;
 
     private long allocatedStoryPoints;
+
     @NotEmpty(message = "{user.password.not.empty}")
     @Length(min = 5, message = "{user.password.length}")
     private String password;
 
     @Column(columnDefinition = "VARCHAR(255) DEFAULT 'images/user.png'")
     private String photo;
+
     private String resetToken;
+
     private String verificationToken;
+
     private LocalDateTime tokenExpiryDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @ManyToMany(mappedBy = "employees")
+    @ManyToMany(mappedBy = "employees", fetch = FetchType.LAZY)
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Task> tasksOwned;
 
-    @OneToMany(mappedBy = "note_owner", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "note_owner", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Note> notesOwned;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Teams> teams = new ArrayList<>();
-
     public List<Teams> getTeams() {
         return teams;
     }

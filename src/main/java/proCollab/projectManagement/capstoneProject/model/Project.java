@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,17 +25,20 @@ public class Project {
 
     private String name;
     private String description;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER) // Eagerly fetch the creator
     @JoinColumn(name = "creator_id")
     private User creator;
+
     private LocalDate startDate;
     private LocalDate dueDate;
     private boolean isCompleted;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER) // Eagerly fetch the company
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "project_employee", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> employees;
 
@@ -43,7 +47,7 @@ public class Project {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Teams> teams = new ArrayList<>();
-
+    
     public Project() {
     }
 
