@@ -54,12 +54,25 @@ public class ProfileController {
     @GetMapping("/profile/mark-done/{taskId}")
     public String setTaskCompleted(@PathVariable Long taskId) {
         taskService.setTaskCompleted(taskId);
+        Task task = taskService.getTaskById(taskId);
+        User user = task.getOwner();
+        if (user != null) {
+            user.setAllocatedStoryPoints(user.getAllocatedStoryPoints() - task.getStoryPoints());
+            userService.saveUser(user);
+        }
+
         return "redirect:/profile";
     }
 
     @GetMapping("/profile/unmark-done/{taskId}")
     public String setTaskNotCompleted(@PathVariable Long taskId) {
         taskService.setTaskNotCompleted(taskId);
+        Task task = taskService.getTaskById(taskId);
+        User user = task.getOwner();
+        if (user != null) {
+            user.setAllocatedStoryPoints(user.getAllocatedStoryPoints() + task.getStoryPoints());
+            userService.saveUser(user);
+        }
         return "redirect:/profile";
     }
 
