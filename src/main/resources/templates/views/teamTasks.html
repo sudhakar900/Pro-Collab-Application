@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/projectTasks.css}">
+    <!--/*/ <th:block th:include="fragments/head :: head"></th:block> /*/-->
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <!--/*/ <th:block th:include="fragments/header :: header('assign-tasks')"></th:block> /*/-->
+    </header>
+    <h3 th:text="'Team Name: ' + ${Team.name}" style="margin-top:50px;"></h3>
+
+    <table class="task-table" >
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterate over each task in the project -->
+            <tr th:each="task : ${tasks}" class="task-row">
+                <!-- Check if the logged-in user is involved in the task -->
+                    <td th:text="${task.name}" class="task-name"></td>
+                    <td th:text="${task.description}" class="task-description"></td>
+                    <td th:text="${task.date}" class="task-date"></td>
+                    <!-- Use the correct URL syntax for task details -->
+                    <td>
+                        <a th:href="@{'/projects/projectTasks/' + ${project.id} + '/taskDetails/' + ${task.id}}"
+                           class="task-link">
+                            Details
+                        </a>
+                    </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

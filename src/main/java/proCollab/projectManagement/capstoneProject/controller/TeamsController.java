@@ -109,6 +109,25 @@ public class TeamsController {
         return "views/addTeamMembers";
     }
 
+    @GetMapping("/teams/{projectId}/teamTask/{teamId}")
+    public String teamTask(@PathVariable("projectId") long projectId, @PathVariable("teamId") long teamId,
+            Model model) {
+        Project project = projectService.getProjectById(projectId);
+        List<Task> projectTasks = project.getTasks();
+        List<Task> teamTask = new ArrayList<>();
+        Teams team = teamService.getTeamById(teamId).get();
+        for (Task t : projectTasks) {
+            if (t.getTeam() != null && t.getTeam() == team) {
+                teamTask.add(t);
+            }
+        }
+        model.addAttribute("project", project);
+        model.addAttribute("Team", team);
+        model.addAttribute("tasks", teamTask);
+        model.addAttribute("teamId", teamId);
+        return "views/teamTasks";
+    }
+
     @GetMapping("/teams/{projectId}/deleteTeam/{teamId}")
     public String deleteTeam(@PathVariable("projectId") long projectId, @PathVariable("teamId") long teamId) {
         Teams team = teamService.getTeamById(teamId).get();
