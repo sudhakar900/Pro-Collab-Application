@@ -1,6 +1,7 @@
 package proCollab.projectManagement.capstoneProject.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +20,15 @@ public class ForgotPasswordService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final EmailService emailService;
+    private final Environment env;
 
     public ForgotPasswordService(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userRepository,
-            TokenService tokenService, EmailService emailService) {
+            TokenService tokenService, EmailService emailService, Environment env) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.emailService = emailService;
         this.passwordEncoder = bCryptPasswordEncoder;
+        this.env = env;
     }
 
     // Initiate password reset process
@@ -52,7 +55,12 @@ public class ForgotPasswordService {
     // Send reset password email with token
     private void sendResetEmail(String email, String token) {
         // Construct and send the reset password email with a link containing the token
-        String resetLink = "http://localhost:1111/reset-password?token=" + token;
+        String baseUrl = env.getProperty("APPLICATION_BASE_URL");
+        if (baseUrl == null || baseUrl.isEmpty()) {
+            throw new IllegalStateException("APPLICATION_BASE_URL is not configured");
+        }
+
+        String resetLink = baseUrl + "/reset-password?token=" + token;
 
         String emailSubject = "Password Reset - Pro Collab";
         String emailContent = "<html><body>" +
@@ -71,7 +79,11 @@ public class ForgotPasswordService {
 
     private void sendResetEmailForSuperAdmin(String email, String token) {
         // Construct and send the reset password email with a link containing the token
-        String resetLink = "http://localhost:1111/reset-password?token=" + token;
+        String baseUrl = env.getProperty("APPLICATION_BASE_URL");
+        if (baseUrl == null || baseUrl.isEmpty()) {
+            throw new IllegalStateException("APPLICATION_BASE_URL is not configured");
+        }
+        String resetLink = baseUrl + "/reset-password?token=" + token;
 
         String emailSubject = "Super Admin Created - Pro Collab";
         String emailContent = "<html><body>" +

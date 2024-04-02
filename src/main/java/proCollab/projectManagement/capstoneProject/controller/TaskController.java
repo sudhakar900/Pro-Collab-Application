@@ -85,7 +85,7 @@ public class TaskController {
         Iterator<Task> taskIterator = allTask.iterator();
         while (taskIterator.hasNext()) {
             Task t = taskIterator.next();
-            if (t.getProject() == null && t.getCreatedUser() != signedUser) {
+            if (t.getCreatedUser() != signedUser) {
                 taskIterator.remove();
             }
             if (t.getProject() != null && !usersProjects.contains(t.getProject())) {
@@ -196,12 +196,24 @@ public class TaskController {
     @GetMapping("/task/mark-done/{id}")
     public String setTaskCompleted(@PathVariable Long id) {
         taskService.setTaskCompleted(id);
+        Task task = taskService.getTaskById(id);
+        User user = task.getOwner();
+        if (user != null) {
+            user.setAllocatedStoryPoints(user.getAllocatedStoryPoints() - task.getStoryPoints());
+            userService.saveUser(user);
+        }
         return "redirect:/tasks";
     }
 
     @GetMapping("/task/unmark-done/{id}")
     public String setTaskNotCompleted(@PathVariable Long id) {
         taskService.setTaskNotCompleted(id);
+        Task task = taskService.getTaskById(id);
+        User user = task.getOwner();
+        if (user != null) {
+            user.setAllocatedStoryPoints(user.getAllocatedStoryPoints() - task.getStoryPoints());
+            userService.saveUser(user);
+        }
         return "redirect:/tasks";
     }
 
@@ -211,8 +223,18 @@ public class TaskController {
         boolean isCompleted = task.isCompleted();
         if (isCompleted) {
             taskService.setTaskNotCompleted(id);
+            User user = task.getOwner();
+            if (user != null) {
+                user.setAllocatedStoryPoints(user.getAllocatedStoryPoints() + task.getStoryPoints());
+                userService.saveUser(user);
+            }
         } else {
             taskService.setTaskCompleted(id);
+            User user = task.getOwner();
+            if (user != null) {
+                user.setAllocatedStoryPoints(user.getAllocatedStoryPoints() - task.getStoryPoints());
+                userService.saveUser(user);
+            }
         }
         return "redirect:/projects/projectTasks/" + projectId + "/taskDetails/" + id;
     }

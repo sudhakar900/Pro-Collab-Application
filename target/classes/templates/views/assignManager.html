@@ -99,8 +99,10 @@
                                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
                                         Cancel
                                     </button>
-                                    <a th:href="${'/user/delete/' + user.id}">
-                                        <span class="btn btn-danger">Delete</span></a>
+                                    <a th:href="${'/user/delete/' + user.id + '?redirect=/superAdmin/assignManager'}">
+                                        <span class="btn btn-danger">Delete</span>
+                                    </a>
+                                    
                                 </div>
                             </div>
                         </div>

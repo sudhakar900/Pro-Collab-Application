@@ -37,11 +37,13 @@
                         <td th:text="${team.name}" class="team-name">Team Name</td>
                         <td class="team-actions">
                             <a class="button button-details" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
-                               th:href="@{'/project/teams/' + ${team.project.id} + '/addUser/' + ${team.id}}">Team Details</a>
+                               th:href="@{'/project/teams/' + ${team.project.id} + '/addUser/' + ${team.id}}">Team Members</a>
                                <a class="button  button-details delete-btn" style="background-color: red;" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
                                th:href="@{'/project/teams/' + ${team.project.id} + '/deleteTeam/' + ${team.id}}">Delete Team</a>
                             <a class="button button-members" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}"
                                th:href="@{'/project/teams/' + ${team.project.id} + '/addUser/' + ${team.id}}">View Team Members</a>
+                               <a class="button button-members" th:if="${#authorization.expression('hasRole(''ROLE_USER'') or hasRole(''ROLE_ADMIN'')')}"
+                               th:href="@{'/project/teams/' + ${team.project.id} + '/teamTask/' + ${team.id}}">Team Task</a>
                         </td>
                     </tr>
                 </tbody>

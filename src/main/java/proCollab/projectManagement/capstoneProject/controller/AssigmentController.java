@@ -78,7 +78,7 @@ public class AssigmentController {
         taskService.assignTaskToUser(task, user);
         if (prevUser != null) {
             int storyPoints = calculateStoryPoints(prevUser);
-            prevUser.setAllocatedStoryPoints(storyPoints-task.getStoryPoints());
+            prevUser.setAllocatedStoryPoints(storyPoints - task.getStoryPoints());
             userService.saveUser(prevUser);
         }
         emailService.sendTaskMail(user.getEmail(), task);
@@ -135,7 +135,7 @@ public class AssigmentController {
         selectedUser.setAllocatedStoryPoints(calculateStoryPoints(selectedUser));
         userService.saveUser(selectedUser);
         if (prevUser != null) {
-            prevUser.setAllocatedStoryPoints(calculateStoryPoints(prevUser)-selectedTask.getStoryPoints());
+            prevUser.setAllocatedStoryPoints(calculateStoryPoints(prevUser) - selectedTask.getStoryPoints());
             userService.saveUser(prevUser);
         }
         emailService.sendTaskMail(selectedUser.getEmail(), selectedTask);
@@ -143,10 +143,10 @@ public class AssigmentController {
     }
 
     public int calculateStoryPoints(User user) {
-        if(user==null){
+        if (user == null) {
             return 0;
         }
-        List<Task> task = user.getTasksOwned();
+        List<Task> task = user.getTasksInProgress();
         int res = 0;
         for (Task t : task) {
             res += t.getStoryPoints();
@@ -176,7 +176,7 @@ public class AssigmentController {
         Task selectedTask = taskService.getTaskById(taskId);
         User user = userService.getUserById(userId);
         taskService.unassignTask(selectedTask, user);
-        user.setAllocatedStoryPoints(calculateStoryPoints(user)-selectedTask.getStoryPoints());
+        user.setAllocatedStoryPoints(calculateStoryPoints(user) - selectedTask.getStoryPoints());
         userService.saveUser(user);
         return "redirect:/assignment/" + userId;
     }
@@ -211,7 +211,7 @@ public class AssigmentController {
         Task task = taskService.getTaskById(taskId);
         if (task.getOwner() != null) {
             User user = task.getOwner();
-            user.setAllocatedStoryPoints(calculateStoryPoints(user)-task.getStoryPoints());
+            user.setAllocatedStoryPoints(calculateStoryPoints(user) - task.getStoryPoints());
             userService.saveUser(user);
         }
         User user = userService.getUserById(userId);
@@ -233,7 +233,7 @@ public class AssigmentController {
         task.setAction("UnAssigned");
         User user = userService.getUserById(userId);
         taskService.unassignTask(task, user);
-        user.setAllocatedStoryPoints(calculateStoryPoints(user)-task.getStoryPoints());
+        user.setAllocatedStoryPoints(calculateStoryPoints(user) - task.getStoryPoints());
         userService.saveUser(user);
         return "redirect:/assignment/project/{projectId}/team/{teamId}/user/{userId}";
     }

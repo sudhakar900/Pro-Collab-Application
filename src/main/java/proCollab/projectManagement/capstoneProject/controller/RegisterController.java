@@ -41,6 +41,7 @@ public class RegisterController {
     public String showRegisterForm(Model model) {
         model.addAttribute("user", new User());
         List<Company> allCompanies = companyService.getAllCompanies();
+        allCompanies.removeFirst();
         model.addAttribute("companies", allCompanies);
 
         return "forms/register";
@@ -66,7 +67,7 @@ public class RegisterController {
         userService.createUser(user);
 
         // Send verification email
-        String verificationLink = "http://localhost:1111/register/verify?token=" + token;
+        String verificationLink = "/register/verify?token=" + token;
         emailService.sendVerificationEmail(user.getEmail(), verificationLink);
 
         return "views/success";

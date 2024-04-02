@@ -127,6 +127,11 @@
             <td>:</td>
             <td th:text="${#lists.size(tasksOwned.?[not completed])}" style="text-align: left;"></td>
           </tr>
+          <tr>
+            <td style="text-align: left;">Story Points Allocated</td>
+            <td>:</td>
+            <td th:text="${user.allocatedStoryPoints}" style="text-align: left;"></td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -153,7 +158,7 @@
             <th>Date</th>
             <th>Days Left</th>
             <th>Completed</th>
-            <th style="text-align: center">Info</th>
+            <th style="text-align: center">Detail</th>
           </tr>
         </thead>
         <tbody>
@@ -183,7 +188,8 @@
             </td>
 
             <td>
-              <button class="info-button" onclick="showModal(this)" th:attr="data-taskid=${t.id}"><img class="infoimg" src="/images/icons8-info.svg" alt=""></button>
+              <a th:href="@{'/projects/projectTasks/' + ${t.project.id} + '/taskDetails/' + ${t.id}}">Task Details</a>
+              <!-- <button class="info-button" onclick="showModal(this)" th:attr="data-taskid=${t.id}"><img class="infoimg" src="/images/icons8-info.svg" alt=""></button> -->
             </td>
           </tr>
 

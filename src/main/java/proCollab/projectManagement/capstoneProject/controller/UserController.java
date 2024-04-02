@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import proCollab.projectManagement.capstoneProject.model.ChatMessage;
 import proCollab.projectManagement.capstoneProject.model.Project;
@@ -72,7 +73,8 @@ public class UserController {
     }
 
     @GetMapping("/user/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
+    public String deleteUser(@PathVariable Long id,
+            @RequestParam(name = "redirect", required = false) String redirectUrl) {
         // Fetch the user by id
         User user = userRepository.findById(id).orElse(null);
 
@@ -102,6 +104,9 @@ public class UserController {
             }
             // Now delete the user
             userRepository.deleteById(id);
+        }
+        if (redirectUrl != null) {
+            return "redirect:/superAdmin/assignManager";
         }
 
         return "redirect:/users";
