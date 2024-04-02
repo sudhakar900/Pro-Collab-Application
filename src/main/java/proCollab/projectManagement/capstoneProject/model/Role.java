@@ -3,7 +3,6 @@ package proCollab.projectManagement.capstoneProject.model;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
-
 @Entity
 public class Role {
 
@@ -11,10 +10,13 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     private Integer id;
+    
     @Column(name = "role")
     private String role;
-    @ManyToMany(mappedBy = "roles")
+    
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private List<User> users;
+    
 
     public Role() {
     }

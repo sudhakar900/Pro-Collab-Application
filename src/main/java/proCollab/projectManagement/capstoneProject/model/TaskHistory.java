@@ -9,6 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name = "task_history")
 public class TaskHistory {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

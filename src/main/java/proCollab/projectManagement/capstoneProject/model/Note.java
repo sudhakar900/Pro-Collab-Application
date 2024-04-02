@@ -3,6 +3,7 @@ package proCollab.projectManagement.capstoneProject.model;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,21 +11,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.springframework.format.annotation.DateTimeFormat;
-
 @Entity
 public class Note {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long note_id;
+    
     private String title;
     private String description;
+    
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-    @ManyToOne
+    
+    @ManyToOne(fetch = FetchType.EAGER) // Change to EAGER fetching
     @JoinColumn(name = "owner_id")
     private User note_owner;
-
     public Note() {
     }
 

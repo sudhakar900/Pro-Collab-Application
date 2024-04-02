@@ -17,36 +17,43 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
     private Long id;
+    
     @NotEmpty(message = "{task.name.not.empty}")
     private String name;
+    
     @NotEmpty(message = "{task.description.not.empty}")
     @Column(length = 1200)
     @Size(max = 1200, message = "{task.description.size}")
     private String description;
+    
     @NotNull(message = "{task.date.not.null}")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
+    
     private boolean isCompleted;
     private String creatorName;
     private String action;
     private int storyPoints;
-    @ManyToOne
+    
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "OWNER_ID")
     private User owner;
-    @ManyToOne
+    
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_user_id")
     private User createdUser;
-    @ManyToOne
+    
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
     private Project project;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id")
     private Teams team;
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TaskThreads> taskThreads;
-
+    
     public long daysLeftUntilDeadline(LocalDate date) {
         return ChronoUnit.DAYS.between(LocalDate.now(), date);
     }
